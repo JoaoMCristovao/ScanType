@@ -2,7 +2,9 @@ class Button {
 
   String buttonText;
   boolean type; //if box or not
-  boolean selected;
+  boolean selected = false;
+  boolean enabled = false;
+  boolean disabled = false;
   float x, y;
   float w, h;
   float fontSize;
@@ -19,35 +21,66 @@ class Button {
     fontSize = _fontSize;
   }
 
+  void update() {
+    if (hovered && mousePressed) {
+      if (disabled) console.setMessage("Button Disabled");
+      selected = true;
+    }
+  }
+
   void show() {
     hovered = detectHover();
 
     if (type) {
-      fill(lightGray);
       stroke(black);
-      if(!hovered)strokeWeight(1);
-      else strokeWeight(5);
+      if (enabled) {
+        textFont(fontWeightBold); 
+        fill(darkGray);
+      } else {
+        fill(lightGray);
+        textFont(fontWeightRegular);
+        if (hovered)fill(gray);
+      }
       rect(x, y, w, h);
-      fill(black);
+      if (enabled) fill(white);
+      else fill(black);
     } else {
+      /*fill(255, 0, 0);
+       strokeWeight(1);
+       rect(x, y, w, h);*/
+      if (!enabled) textFont(fontWeightRegular);
+      else textFont(fontWeightBold);
       fill(black);
     }
-    
+
     textSize(fontSize);
     textAlign(CENTER, CENTER);
-    text(buttonText, x + w/2, y + h/2);
+
+    text(buttonText, x + w/2, y + h/2 - fontSize/6);
   }
-  
-  void mousePressed(){
-    if(hovered) println(buttonText + " clicked");
+
+  void setSelectedState(boolean state) {
+    selected = state;
+  }
+
+  void setEnabledState(boolean state) {
+    enabled = state;
+  }
+
+  void setText(String _text) {
+    buttonText = _text;
+  }
+
+  boolean getSelected() {
+    return selected;
   }
 
   boolean detectHover() {
-    if(mouseX < x)return false;
-    if(mouseX > x + w)return false;
-    if(mouseY < y) return false;
-    if(mouseY > y + h) return false;
-    
+    if (mouseX < screenX(x, 0))return false;
+    if (mouseX > screenX(x + w, 0))return false;
+    if (mouseY < screenY(0, y)) return false;
+    if (mouseY > screenY(0, y + h)) return false;
+
     return true;
   }
 }
