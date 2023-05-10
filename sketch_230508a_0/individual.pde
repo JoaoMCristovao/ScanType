@@ -6,12 +6,14 @@ class Individual {
   int maxShapes;
 
   Individual(int _maxShapes) {
+    maxShapes = _maxShapes;
     int currentShapes = floor(random(1, _maxShapes));
     randomize(currentShapes);
   }
 
-  Individual(ArrayList _genes) {
+  Individual(ArrayList _genes, int _maxShapes) {
     genes = _genes;
+    maxShapes = _maxShapes;
   }
 
   void randomize(int nShapes) { //imgId, x, y, scale, rot
@@ -45,9 +47,10 @@ class Individual {
         genes.set(i, constrain(genes.get(i) + random(-0.1, 0.1), 0, 1));
       }
     }
-    if (random(1) <= rate) {
-      if (random(1) < 0.5) addShape();
-      else removeShape();
+    if (random(1) <= rate/2) {
+      
+      if (random(1) < 0.5) removeShape();
+      else addShape();
     }
   }
 
@@ -69,23 +72,17 @@ class Individual {
     PGraphics canvas = createGraphics(resolution, resolution);
     canvas.beginDraw();
     //canvas.background(255);
-    canvas.noFill();
-    canvas.stroke(0);
-    canvas.strokeWeight(canvas.height * 0.002);
     render(canvas, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
     canvas.endDraw();
     return canvas;
   }
 
   void render(PGraphics canvas, float x, float y, float w, float h) {
-    float sum = 0;
-    for (int i = 0; i < genes.size(); i++) {
-      sum += genes.get(i);
-    }
     canvas.pushMatrix();
     canvas.translate(x, y);
-    canvas.fill(255, 0, 0);
-    canvas.circle(0, 0, sum*2);
+    canvas.noStroke();
+    canvas.fill(255 - fitness*fitness*4, fitness*10, 255/5*fitness);
+    canvas.circle(0, 0, w/(maxShapes*5) * fitness);
     canvas.popMatrix();
   }
 
@@ -102,7 +99,9 @@ class Individual {
   }
 
   Individual getCopy() {
-    return new Individual(genes);
+    Individual copy = new Individual(genes, maxShapes);
+    copy.setFitness(fitness);
+    return copy;
   }
 
   ArrayList<Float> getGenes() {

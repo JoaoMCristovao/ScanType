@@ -5,9 +5,9 @@
 
 color white = color(255);
 color black = color(0);
-color lightGray = color(200);
-color gray = color (130);
-color darkGray = color(50);
+color lightGray = color(235);
+color gray = color (215);
+color darkGray = color(110);
 
 //measurements
 
@@ -17,10 +17,10 @@ int mainPadding = gap * 4;
 //typography
 
 int fontSizeTiny = 10;
-int fontSizeSmall = 24;
-int fontSizeMedium = 32;
-int fontSizeBig = 46;
-int fontSizeHuge = 72;
+int fontSizeSmall = 16;
+int fontSizeMedium = 24;
+int fontSizeBig = 32;
+int fontSizeHuge = 46;
 
 PFont fontWeightLight;
 PFont fontWeightRegular;
@@ -36,6 +36,7 @@ ArchiveScreen archiveScreen;
 
 int currentScreen = 0;
 
+Button pressedButton;
 
 void settings() {
   //size(1080, 720);
@@ -89,8 +90,10 @@ void draw() {
   console.show();
 }
 
-void mousePressed() {
-  
+void mouseReleased() {
+  if(pressedButton == null) return;
+  pressedButton.selected();
+  pressedButton = null;
 }
 
 void keyPressed() { //sliders / shortcuts

@@ -23,9 +23,13 @@ class Button {
 
   void update() {
     if (hovered && mousePressed) {
-      if (disabled) console.setMessage("Button Disabled");
-      selected = true;
+      pressedButton = this;
     }
+  }
+  
+  void selected(){
+    if (disabled) console.setMessage("Button Disabled");
+      selected = true;
   }
 
   void show() {
@@ -74,9 +78,13 @@ class Button {
   boolean getSelected() {
     return selected;
   }
+  
+  boolean getEnabled() {
+    return enabled;
+  }
 
   boolean detectHover() {
-    if (mouseX < screenX(x, 0))return false;
+    if (mouseX < screenX(x, 0))return false; //screenX and screenY because of translations
     if (mouseX > screenX(x + w, 0))return false;
     if (mouseY < screenY(0, y)) return false;
     if (mouseY > screenY(0, y + h)) return false;

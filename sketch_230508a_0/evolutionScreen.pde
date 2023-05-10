@@ -5,7 +5,9 @@ class EvolutionScreen {
 
   //box left
   float boxLeftW = 0.25;
+  float boxLeftPadding = gap * 3;
   Button evoStartButton;
+  Button saveButton;
 
   //abc buttons
   Button[][] alphabetButtons;
@@ -15,7 +17,7 @@ class EvolutionScreen {
   //evolution
   PVector evoGridPos;
   PVector[][] evoGrid;
-  int evoPopulationSize = floor(random(20, 500));
+  int evoPopulationSize = floor(random(20, 1000));
   Population evoPopulation;
 
   EvolutionScreen(float _w, float _h) {
@@ -23,7 +25,8 @@ class EvolutionScreen {
     h = _h;
 
     //Button(String _buttonText, boolean _type, float _x, float _y, float _w, float _h, float _fontSize)
-    evoStartButton = new Button("Start Evolving", true, 0, h - gap * 7, w * boxLeftW, gap * 7, fontSizeSmall);
+    evoStartButton = new Button("Start Evolving", true, 0, h - gap * 7, w * boxLeftW, gap * 7, fontSizeMedium);
+    saveButton = new Button("Save glyph to archive", true, w * boxLeftW - gap * 24 - boxLeftPadding, h - gap * 14, gap * 24, gap * 4, fontSizeSmall);
 
     alphabetButtons = createAlphabetButtons();
 
@@ -33,10 +36,18 @@ class EvolutionScreen {
 
   void update() {
     evoStartButton.update();
-    if (evoStartButton.getSelected()) {
+
+    if (evoStartButton.getSelected() && !evoStartButton.getEnabled()) {
       evoStartButton.setSelectedState(false);
+      evoStartButton.setEnabledState(true);
       startNewEvolution(evoPopulationSize);
-    } else if(evoPopulation != null) evoPopulation.evolve();
+      evoStartButton.setText("Stop Evolving");
+    } else if (evoStartButton.getSelected() && evoStartButton.getEnabled()) {
+      evoStartButton.setSelectedState(false);
+      evoStartButton.setEnabledState(false);
+      evoStartButton.setText("Start Evolving");
+      console.setMessage("Stopped Evolving");
+    } else if (evoPopulation != null && evoStartButton.getEnabled()) evoPopulation.evolve();
   }
 
   void show() {
@@ -51,7 +62,45 @@ class EvolutionScreen {
     strokeWeight(1);
     rect(0, 0, w * boxLeftW, h);
 
+    showSettings();
+    showBestIndividual();
     evoStartButton.show();
+  }
+
+  void showBestIndividual() {
+    fill(white);
+    stroke(black);
+    float sideSize = w * boxLeftW - gap * 6;
+    float bestX = boxLeftPadding;
+    float bestY = saveButton.y - gap - sideSize;
+    square(bestX, bestY, sideSize);
+    if (evoPopulation != null) {
+      image(evoPopulation.getIndiv(0).getPhenotype(500), bestX, bestY, sideSize, sideSize);
+    }
+    saveButton.show();
+  }
+
+  void showSettings() {
+    String info;
+
+    if (evoPopulation != null) {
+      info = "Current Generation: " + evoPopulation.getGenerations() +
+        "\n\nPoupulation Size: " + evoPopulation.individuals.length +
+        "\nCrossover Rate: " + evoPopulation.crossoverRate +
+        "\nTournament Size: " + evoPopulation.tournamentSize +
+        "\nElitism: " + evoPopulation.eliteSize;
+    } else {
+      info = "Current Generation: -" +
+        "\n\nPoupulation Size: -" +
+        "\nCrossover Rate: -" +
+        "\nTournament Size: -"+
+        "\nElitism: -";
+    }
+
+    textSize(fontSizeSmall);
+    fill(black);
+    textAlign(LEFT, TOP);
+    text(info, boxLeftPadding, boxLeftPadding);
   }
 
   void showEvolutionGrid() {
@@ -64,7 +113,7 @@ class EvolutionScreen {
       else  strokeWeight(1);
       stroke(black);
       rect(evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
-      if(evoPopulation != null) image(evoPopulation.getIndiv(i).getPhenotype(100), evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
+      if (evoPopulation != null) image(evoPopulation.getIndiv(i).getPhenotype(100), evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
       col += 1;
       if (col >= evoGrid[row].length) {
         row += 1;
@@ -83,7 +132,7 @@ class EvolutionScreen {
 
   void startNewEvolution(int _populationSize) {
     //Population(int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize)
-    evoPopulation = new Population(_populationSize, floor(random(1,10)), floor(random(1,4)), random(0.5), random(0.5), floor(random(3,10)));
+    evoPopulation = new Population(_populationSize, floor(random(1, 10)), floor(random(1, 4)), random(0.5), random(0.5), floor(random(3, 6)));
   }
 
   Button[][] createAlphabetButtons() {

@@ -10,9 +10,9 @@ class Header {
   Header(float _h) {
     h = _h;
 
-    headerButtons[0] = new Button("Scan Object", false, width - 108*gap, 0, 37*gap, h, fontSizeMedium);
-    headerButtons[1] = new Button("Evolve Letters", false, width - 72*gap, 0, 37*gap, h, fontSizeMedium);
-    headerButtons[2] = new Button("Letter Archive", false, width - 36*gap, 0, 37*gap, h, fontSizeMedium);
+    headerButtons[0] = new Button("Scan Object", false, width - 108*gap, 0, 37*gap, h, fontSizeBig);
+    headerButtons[1] = new Button("Evolve Letters", false, width - 72*gap, 0, 37*gap, h, fontSizeBig);
+    headerButtons[2] = new Button("Letter Archive", false, width - 36*gap, 0, 37*gap, h, fontSizeBig);
 
     headerButtons[0].setEnabledState(true);
   }
@@ -36,7 +36,7 @@ class Header {
     textFont(fontWeightBold);
     
     fill(black);
-    textSize(fontSizeMedium);
+    textSize(fontSizeBig);
     textAlign(LEFT, CENTER);
 
     text("SCAN TYPE", mainPadding, h/2 - fontSizeMedium/6);

@@ -17,7 +17,7 @@ class Evaluator{
     //PImage phenotype = indiv.getPhenotype(targetImage.height);
     //int[] phenotype_pixels_brightness = getPixelsBrightness(phenotype);
     //float similarity = getSimilarityRMSE(targetPixelsBrightness, phenotype_pixels_brightness, 255);
-    ArrayList<Float> indivGenes= indiv.getGenes();
+    ArrayList<Float> indivGenes = indiv.getGenes();
     float sum = 0;
     for(int i = 0; i < indivGenes.size(); i++){
      sum += indivGenes.get(i); 
