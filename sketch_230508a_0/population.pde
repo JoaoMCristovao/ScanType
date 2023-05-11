@@ -10,6 +10,7 @@ class Population {
   float crossoverRate;
   int tournamentSize;
   float mutationRate;
+  int maxShapes;
 
   Population(PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
     individuals = new Individual[_populationSize];
@@ -20,6 +21,7 @@ class Population {
     crossoverRate = _crossoverRate;
     tournamentSize = _tournamentSize;
 
+    maxShapes = _maxShapes;
     initialize(_maxShapes);
   }
 

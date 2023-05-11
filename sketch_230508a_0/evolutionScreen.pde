@@ -9,15 +9,18 @@ class EvolutionScreen {
   Button evoStartButton;
   Button saveButton;
 
+  //algorithm window
+  AlgorithmWindow algorithmWindow;
+
   //abc buttons
   Button[][] alphabetButtons;
   float alphabetH;
   float alphabetW;
 
   //evolution
+  boolean evolving;
   PVector evoGridPos;
   PVector[][] evoGrid;
-  int evoPopulationSize = 50;
   Population evoPopulation;
 
   EvolutionScreen(float _w, float _h) {
@@ -31,7 +34,9 @@ class EvolutionScreen {
     alphabetButtons = createAlphabetButtons();
 
     evoGridPos = new PVector(boxLeftW * w + mainPadding, alphabetH + mainPadding);
-    evoGrid = calculateGrid(evoPopulationSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
+    
+
+    algorithmWindow = new AlgorithmWindow(evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y);
   }
 
   void update() {
@@ -40,20 +45,24 @@ class EvolutionScreen {
     if (evoStartButton.getSelected() && !evoStartButton.getEnabled()) {
       evoStartButton.setSelectedState(false);
       evoStartButton.setEnabledState(true);
-      startNewEvolution(evoPopulationSize);
+      startNewEvolution();
       evoStartButton.setText("Stop Evolving");
+      evolving = true;
     } else if (evoStartButton.getSelected() && evoStartButton.getEnabled()) {
       evoStartButton.setSelectedState(false);
       evoStartButton.setEnabledState(false);
       evoStartButton.setText("Start Evolving");
       console.setMessage("Stopped Evolving");
+      evolving = false;
     } else if (evoPopulation != null && evoStartButton.getEnabled()) evoPopulation.evolve();
+    else if (!evolving) algorithmWindow.update();
   }
 
   void show() {
     showAlphabetButtons();
-    showEvolutionGrid();
     showBoxLeft();
+    if (!evolving) showAlgorithmWindow();
+    else showEvolutionGrid();
   }
 
   void showBoxLeft() {
@@ -89,14 +98,18 @@ class EvolutionScreen {
 
     if (evoPopulation != null) {
       info = "Current Generation: " + evoPopulation.getGenerations() +
-        "\n\nPoupulation Size: " + evoPopulation.individuals.length +
-        "\nCrossover Rate: " + evoPopulation.crossoverRate +
+        "\n\nMax Shapes: " + evoPopulation.maxShapes +
+        "\nPopulation Size: " + evoPopulation.individuals.length +
+        "\nMutation Rate: " + evoPopulation.mutationRate*100 + "%" + 
+        "\nCrossover Rate: " + evoPopulation.crossoverRate*100 + "%" + 
         "\nTournament Size: " + evoPopulation.tournamentSize +
         "\nElitism: " + evoPopulation.eliteSize +
         "\n\nBest Fitness: " + evoPopulation.getIndiv(0).getFitness();
     } else {
       info = "Current Generation: -" +
-        "\n\nPoupulation Size: -" +
+         "\n\nMax Shapes: -" +
+        "\nPopulation Size: -" +
+        "\nMutation Rate: -" +
         "\nCrossover Rate: -" +
         "\nTournament Size: -"+
         "\nElitism: -" +
@@ -109,9 +122,13 @@ class EvolutionScreen {
     text(info, boxLeftPadding, boxLeftPadding);
   }
 
+  void showAlgorithmWindow() {
+    algorithmWindow.show();
+  }
+
   void showEvolutionGrid() {
     int row = 0, col = 0;
-    for (int i = 0; i < evoPopulationSize; i++) {
+    for (int i = 0; i < evoPopulation.individuals.length; i++) {
       if (i == 0) fill(white);
       else fill(lightGray);
       if (mouseX > screenX(evoGrid[row][col].x, 0) && mouseX < screenX(evoGrid[row][col].x + evoGrid[row][col].z, 0) 
@@ -136,7 +153,7 @@ class EvolutionScreen {
     }
   }
 
-  void startNewEvolution(int _populationSize) {
+  void startNewEvolution() {
     String glyphToEvolve = "Z";
     for (int i = 0; i < alphabetButtons.length; i++) {
       for (int j = 0; j < alphabetButtons[0].length; j++) { 
@@ -145,7 +162,17 @@ class EvolutionScreen {
     }
     PImage referenceImage = loadImage("/references/" + glyphToEvolve + ".png");
 
-    evoPopulation = new Population(referenceImage, _populationSize, 6, 2, 0.1, 0.3, 4);
+    int popSize = int(algorithmWindow.getPopulation());
+    int maxShapes = int(algorithmWindow.getMaximumShapes());
+    int eliteSize = int(algorithmWindow.getElitism());
+    float mutation = algorithmWindow.getMutationRate();
+    float crossover = algorithmWindow.getCrossoverRate();
+    int tournamentSize = int(algorithmWindow.getTournamentSize());
+    
+    evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
+    
+    // Population         (PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
+    evoPopulation = new Population(referenceImage,             popSize,      maxShapes,      eliteSize,            mutation,            crossover,      tournamentSize);
     console.setMessage("Started evolution towards letter " + glyphToEvolve);
   }
 
