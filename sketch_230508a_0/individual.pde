@@ -11,9 +11,10 @@ class Individual {
     randomize(currentShapes);
   }
 
-  Individual(ArrayList _genes, int _maxShapes) {
+  Individual(ArrayList _genes, int _maxShapes, float _fitness) {
     genes = _genes;
     maxShapes = _maxShapes;
+    fitness = _fitness;
   }
 
   void randomize(int nShapes) { //imgId, x, y, scale, rot
@@ -68,22 +69,32 @@ class Individual {
     }
   }
 
-  PImage getPhenotype(int resolution) {
+  PImage getPhenotype(boolean res, boolean hasBG) {
+    int resolution = objectResolutionLow;
+    if(res) resolution = objectResolutionHigh;
     PGraphics canvas = createGraphics(resolution, resolution);
     canvas.beginDraw();
-    //canvas.background(255);
-    render(canvas, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
+    if(hasBG) canvas.background(255);
+    render(canvas, canvas.width, canvas.height, res);
     canvas.endDraw();
     return canvas;
   }
 
-  void render(PGraphics canvas, float x, float y, float w, float h) {
-    canvas.pushMatrix();
-    canvas.translate(x, y);
+  void render(PGraphics canvas, float w, float h, boolean res) { //imgId, x, y, scale, rot
     canvas.noStroke();
-    canvas.fill(255 - fitness*fitness*4, fitness*10, 255/5*fitness);
-    canvas.circle(0, 0, w/(maxShapes*5) * fitness);
-    canvas.popMatrix();
+    for(int i = 0; i < getNShapes(); i++){
+      int index = i * 5;
+      canvas.pushMatrix();
+      int imgIndex = constrain(floor(genes.get(index) * objectsHighRes.length), 0, objectsHighRes.length-1);
+      canvas.fill(0);
+      canvas.translate(genes.get(index + 1) * w,genes.get(index + 2) * h);
+      canvas.scale(genes.get(index + 3));
+      canvas.rotate(genes.get(index + 4) * TWO_PI);
+      if(!res) canvas.image(objectsLowRes[imgIndex], 0, 0);
+      else  canvas.image(objectsHighRes[imgIndex], 0, 0);
+      
+      canvas.popMatrix();
+    }
   }
 
   int getNShapes() {
@@ -99,8 +110,7 @@ class Individual {
   }
 
   Individual getCopy() {
-    Individual copy = new Individual(genes, maxShapes);
-    copy.setFitness(fitness);
+    Individual copy = new Individual(genes, maxShapes, fitness);
     return copy;
   }
 

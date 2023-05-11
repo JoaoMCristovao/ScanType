@@ -3,9 +3,9 @@ class Evaluator{
   PImage targetImage;
   int[] targetPixelsBrightness;
   
-  Evaluator(PImage image, int resolution) {
+  Evaluator(PImage image) {
     targetImage = image.copy(); // Get a clean copy of the target image
-    targetImage.resize(resolution, resolution); // Resize the target image to the preset resolution
+    targetImage.resize(objectResolutionLow, objectResolutionLow); // Resize the target image to the preset resolution
     targetPixelsBrightness = getPixelsBrightness(targetImage); // Get brightness values of the target image
   }
   
@@ -14,24 +14,19 @@ class Evaluator{
   }
   
   float calculateFitness(Individual indiv) {
-    //PImage phenotype = indiv.getPhenotype(targetImage.height);
-    //int[] phenotype_pixels_brightness = getPixelsBrightness(phenotype);
-    //float similarity = getSimilarityRMSE(targetPixelsBrightness, phenotype_pixels_brightness, 255);
-    ArrayList<Float> indivGenes = indiv.getGenes();
-    float sum = 0;
-    for(int i = 0; i < indivGenes.size(); i++){
-     sum += indivGenes.get(i); 
-    }
-    return sum;
+    PImage phenotype = indiv.getPhenotype(false, true);
+    int[] phenotypePixelsBrightness = getPixelsBrightness(phenotype);
+    float similarity = getSimilarityRMSE(targetPixelsBrightness, phenotypePixelsBrightness, 255);
+    return similarity;
   }
   
   // Calculate the brighness values of a given image
   int[] getPixelsBrightness(PImage image) {
-    int[] pixels_brightness = new int[image.pixels.length];
+    int[] pixelBrightness = new int[image.pixels.length];
     for (int i = 0; i < image.pixels.length; i++) {
-      pixels_brightness[i] = image.pixels[i] & 0xFF; // Use the blue channel to estimate brighness (very fast to calculate)
+      pixelBrightness[i] = image.pixels[i] & 0xFF; // Use the blue channel to estimate brighness (very fast to calculate)
     }
-    return pixels_brightness;
+    return pixelBrightness;
   }
   
   // Calculate the normalised similarity between two samples (pixels brighenss values)

@@ -38,6 +38,13 @@ int currentScreen = 0;
 
 Button pressedButton;
 
+//objects
+
+PImage objectsHighRes[];
+PImage objectsLowRes[];
+int objectResolutionHigh = 500;
+int objectResolutionLow = 200;
+
 void settings() {
   //size(1080, 720);
   fullScreen();
@@ -46,6 +53,8 @@ void settings() {
 void setup() {
   //gap = width/240;
   loadFonts();
+  objectsHighRes = loadObjects(objectResolutionHigh);
+  objectsLowRes = loadObjects(objectResolutionLow);
 
   textFont(fontWeightRegular);
 
@@ -91,7 +100,7 @@ void draw() {
 }
 
 void mouseReleased() {
-  if(pressedButton == null) return;
+  if (pressedButton == null) return;
   pressedButton.selected();
   pressedButton = null;
 }
@@ -107,6 +116,31 @@ void loadFonts() {
   fontWeightLight = createFont(directory + "Light" + fileType, fontSize);
   fontWeightRegular = createFont(directory + "Regular" + fileType, fontSize);
   fontWeightBold = createFont(directory + "Bold" + fileType, fontSize);
+}
+
+PImage[] loadObjects(int res) {
+  String directory = "/objects";
+
+  File f = dataFile(directory);
+  String[] names = f.list();
+
+  PImage[] objs = new PImage[names.length];
+
+  for (int i = 0; i < objs.length; i++) {
+    String fileName = names[i];
+    objs[i] = loadImage(directory + "/" + fileName);
+    int w = objs[i].width;
+    int h = objs[i].height;
+    float aspectRatio = w / h;
+
+    if (w >= h) {
+      objs[i].resize(res, floor(res/aspectRatio));
+    } else {
+      objs[i].resize(floor(res*aspectRatio), res);
+    }
+  }
+
+  return objs;
 }
 
 PVector[][] calculateGrid(int cells, float x, float y, float w, float h, float margin_min, float gutter_h, float gutter_v, boolean align_top) {

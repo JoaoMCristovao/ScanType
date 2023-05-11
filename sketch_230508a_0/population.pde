@@ -11,9 +11,9 @@ class Population {
   int tournamentSize;
   float mutationRate;
 
-  Population(int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
+  Population(PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
     individuals = new Individual[_populationSize];
-    evaluator = new Evaluator();
+    evaluator = new Evaluator(_referenceImage);
 
     eliteSize = _eliteSize;
     mutationRate = _mutationRate;
@@ -21,10 +21,9 @@ class Population {
     tournamentSize = _tournamentSize;
 
     initialize(_maxShapes);
-    console.setMessage("Started evolution!");
   }
 
-  void initialize(int _maxShapes) {//gdfjkhgfnmdnvjkfdbnmfdhdmskjfmdnjkvhsmdç^""
+  void initialize(int _maxShapes) {
     for (int i = 0; i < individuals.length; i++) {
       individuals[i] = new Individual(_maxShapes);
     }
@@ -88,7 +87,7 @@ class Population {
     // Select a random set of individuals from the population
     Individual[] tournament = new Individual[tournamentSize];
     for (int i = 0; i < tournament.length; i++) {
-      tournament[i] = individuals[int(random(0, individuals.length))];
+      tournament[i] = individuals[int(random(0, individuals.length))].getCopy();
     }
     // Get the fittest individual from the selected individuals
     Individual fittest = tournament[0];
@@ -112,7 +111,7 @@ class Population {
 
   // Get an individual from the popultioon located at the given index
   Individual getIndiv(int index) {
-    return individuals[index];
+    return individuals[index].getCopy();
   }
 
   // Get the number of individuals in the population
