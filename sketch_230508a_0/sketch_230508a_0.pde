@@ -1,6 +1,8 @@
 //colisao -> 0/1 soma
 //questionarios 
 
+float mutation_rate = 0.5;
+
 //colors
 
 color white = color(255);
@@ -52,6 +54,7 @@ void settings() {
 
 void setup() {
   //gap = width/240;
+  frameRate(120);
   loadFonts();
   objectsHighRes = loadObjects(objectResolutionHigh);
   objectsLowRes = loadObjects(objectResolutionLow);

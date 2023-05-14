@@ -32,8 +32,8 @@ class AlgorithmWindow {
       translate(0, sliders[i].h);
     }
     int currentPopulationSize = int(sliders[0].getValue());
-    sliders[3].maxVal = ceil(currentPopulationSize/5);
-    sliders[4].maxVal = ceil(currentPopulationSize/2);
+    sliders[3].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
+    sliders[4].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
     popMatrix();
   }
 

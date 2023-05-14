@@ -11,10 +11,9 @@ class Individual {
     randomize(currentShapes);
   }
 
-  Individual(ArrayList _genes, int _maxShapes, float _fitness) {
+  Individual(ArrayList _genes, int _maxShapes) {
     genes = _genes;
     maxShapes = _maxShapes;
-    fitness = _fitness;
   }
 
   void randomize(int nShapes) { //imgId, x, y, scale, rot
@@ -43,16 +42,18 @@ class Individual {
   }
 
   void mutate(float rate) {
+    //if(true) return;
     for (int i = 0; i < genes.size(); i++) {
-      if (random(1) <= rate) {
+      //if (random(1) <= rate) {
+        if (random(1) <= rate) {
         genes.set(i, constrain(genes.get(i) + random(-0.1, 0.1), 0, 1));
       }
     }
+    /*
     if (random(1) <= rate/2) {
-      
       if (random(1) < 0.5) removeShape();
       else addShape();
-    }
+    }*/
   }
 
   void addShape() {
@@ -64,8 +65,9 @@ class Individual {
 
   void removeShape() {
     if (getNShapes() <= 1) return;
-    for (int i = 0; i < 5; i++) {
-      genes.remove(genes.size()-1);
+    int index = floor(random (getNShapes())) * 5;
+    for (int i = index; i < index+5; i++) {
+      genes.remove(index);
     }
   }
 
@@ -110,7 +112,8 @@ class Individual {
   }
 
   Individual getCopy() {
-    Individual copy = new Individual(genes, maxShapes, fitness);
+    Individual copy = new Individual(genes, maxShapes);
+    copy.fitness = fitness;
     return copy;
   }
 

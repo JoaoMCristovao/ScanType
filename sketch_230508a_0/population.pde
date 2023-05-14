@@ -28,9 +28,6 @@ class Population {
   void initialize(int _maxShapes) {
     for (int i = 0; i < individuals.length; i++) {
       individuals[i] = new Individual(_maxShapes);
-    }
-
-    for (int i = 0; i < individuals.length; i++) {
       float fitness = evaluator.calculateFitness(individuals[i]);
       individuals[i].setFitness(fitness);
     }
@@ -65,7 +62,7 @@ class Population {
     }
 
     // Evaluate new individuals
-    for (int i = eliteSize; i < individuals.length; i++) {
+    for (int i = 0; i < individuals.length; i++) {
       float fitness = evaluator.calculateFitness(newGeneration[i]);
       newGeneration[i].setFitness(fitness);
     }
@@ -77,8 +74,6 @@ class Population {
 
     // Sort individuals in the population by fitness
     sortIndividualsByFitness();
-
-    //println(individuals[0].genes.size());
 
     // Increment the number of generations
     generations++;

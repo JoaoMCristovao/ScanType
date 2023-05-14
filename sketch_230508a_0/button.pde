@@ -2,9 +2,9 @@ class Button {
 
   String buttonText;
   boolean type; //if box or not
-  boolean selected = false;
-  boolean enabled = false;
-  boolean disabled = false;
+  boolean selected = false; //is was selected recently
+  boolean enabled = false; //if is toggled on
+  boolean disabled = false; //if can be used
   float x, y;
   float w, h;
   float fontSize;
@@ -23,13 +23,13 @@ class Button {
 
   void update() {
     if (hovered && mousePressed) {
-      pressedButton = this;
+      pressedButton = this; //
     }
   }
-  
-  void selected(){
-    if (disabled) console.setMessage("Button Disabled");
-      selected = true;
+
+  void selected() {
+    if (disabled) return;
+    selected = true;
   }
 
   void show() {
@@ -45,6 +45,7 @@ class Button {
         textFont(fontWeightRegular);
         if (hovered)fill(gray);
       }
+      if (disabled)fill(gray);
       rect(x, y, w, h);
       if (enabled) fill(white);
       else fill(black);
@@ -71,6 +72,10 @@ class Button {
     enabled = state;
   }
 
+  void setDisabledState(boolean state) {
+    disabled = state;
+  }
+
   void setText(String _text) {
     buttonText = _text;
   }
@@ -78,7 +83,7 @@ class Button {
   boolean getSelected() {
     return selected;
   }
-  
+
   boolean getEnabled() {
     return enabled;
   }

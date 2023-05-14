@@ -72,10 +72,10 @@ class Slider {
   }
   
   boolean detectHover() {
-    if (mouseX < screenX(sidePadding, 0))return false; //screenX and screenY because of translations
-    if (mouseX > screenX(w-sidePadding, 0))return false;
-    if (mouseY < screenY(0, lineHeight - lineWeight*2)) return false;
-    if (mouseY > screenY(0, lineHeight + lineWeight*2)) return false;
+    if (mouseX < screenX(0, 0))return false; //screenX and screenY because of translations
+    if (mouseX > screenX(w, 0))return false;
+    if (mouseY < screenY(0, lineHeight - lineWeight*5)) return false;
+    if (mouseY > screenY(0, lineHeight + lineWeight*5)) return false;
 
     return true;
   }

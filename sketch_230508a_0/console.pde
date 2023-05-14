@@ -19,6 +19,8 @@ class Console {
   }
 
   void show() {
+    textFont(fontWeightRegular);
+    
     fill(black);
     rect(0, height- boxHeight, width, boxHeight);
     fill(255);
