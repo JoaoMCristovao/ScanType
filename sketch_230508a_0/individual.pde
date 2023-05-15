@@ -82,16 +82,20 @@ class Individual {
     return canvas;
   }
 
-  void render(PGraphics canvas, float w, float h, boolean res) { //imgId, x, y, scale, rot
+  void render(PGraphics canvas, float w, float h, boolean res) { //imgId, x, y, scale, rot, imgId, x, y, scale, rot, imgId, x, y, scale, rot, imgId, x, y, scale, rot,
     canvas.noStroke();
     for(int i = 0; i < getNShapes(); i++){
       int index = i * 5;
       canvas.pushMatrix();
       int imgIndex = constrain(floor(genes.get(index) * objectsHighRes.length), 0, objectsHighRes.length-1);
       canvas.fill(0);
+      
       canvas.translate(genes.get(index + 1) * w,genes.get(index + 2) * h);
+      
       canvas.scale(genes.get(index + 3));
+      
       canvas.rotate(genes.get(index + 4) * TWO_PI);
+      
       if(!res) canvas.image(objectsLowRes[imgIndex], 0, 0);
       else  canvas.image(objectsHighRes[imgIndex], 0, 0);
       

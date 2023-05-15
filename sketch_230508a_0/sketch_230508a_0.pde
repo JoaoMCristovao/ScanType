@@ -45,7 +45,7 @@ Button pressedButton;
 PImage objectsHighRes[];
 PImage objectsLowRes[];
 int objectResolutionHigh = 500;
-int objectResolutionLow = 200;
+int objectResolutionLow = 300;
 
 void settings() {
   //size(1080, 720);

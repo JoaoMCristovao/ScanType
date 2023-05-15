@@ -8,6 +8,9 @@ class Button {
   float x, y;
   float w, h;
   float fontSize;
+  
+  int alignHorizontal = CENTER;
+  int alignVertical = CENTER;
 
   boolean hovered;
 
@@ -19,6 +22,18 @@ class Button {
     w = _w;
     h = _h;
     fontSize = _fontSize;
+  }
+  
+  Button(String _buttonText, boolean _type, float _x, float _y, float _w, float _h, float _fontSize, int _alignHorizontal, int _alignVertical) {
+    buttonText = _buttonText;
+    type = _type;
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
+    fontSize = _fontSize;
+    alignHorizontal = _alignHorizontal;
+    alignVertical = _alignVertical;
   }
 
   void update() {
@@ -50,16 +65,13 @@ class Button {
       if (enabled) fill(white);
       else fill(black);
     } else {
-      /*fill(255, 0, 0);
-       strokeWeight(1);
-       rect(x, y, w, h);*/
       if (!enabled) textFont(fontWeightRegular);
       else textFont(fontWeightBold);
       fill(black);
     }
 
     textSize(fontSize);
-    textAlign(CENTER, CENTER);
+    textAlign(alignHorizontal, alignVertical);
 
     text(buttonText, x + w/2, y + h/2 - fontSize/6);
   }

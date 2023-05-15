@@ -41,5 +41,4 @@ class Evaluator{
     rmse /= max_rmse; // Normalise rmse
     return 1 - rmse; // Invert the result since we want the similarity and not the difference
   }
-  
 }
