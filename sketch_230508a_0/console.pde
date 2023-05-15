@@ -1,6 +1,6 @@
 class Console {
 
-  String message = "Welcome to the App!";
+  String message = "Welcome to SCAN TYPE!";
   String messageTime;
   Float boxHeight;
 
@@ -19,11 +19,16 @@ class Console {
   }
 
   void show() {
+    textFont(fontWeightRegular);
+    
     fill(black);
     rect(0, height- boxHeight, width, boxHeight);
     fill(255);
     textSize(fontSizeTiny);
     textAlign(LEFT, CENTER);
-    text(messageTime + " - " + message, gap, height- boxHeight/2);
+    text(messageTime + " - " + message, mainPadding/2, height- boxHeight/2);
+    
+    textAlign(LEFT, CENTER);
+    text("Frame rate: " + int(frameRate), width - mainPadding * 3, height- boxHeight/2);
   }
 }
