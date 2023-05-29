@@ -33,7 +33,6 @@ class AlgorithmWindow {
     }
     int currentPopulationSize = int(sliders[0].getValue());
     sliders[3].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
-    sliders[4].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
     popMatrix();
   }
 
@@ -66,7 +65,7 @@ class AlgorithmWindow {
 
     newSliders[3] = new Slider(false, "Tournament Size", 1, 25,sliderW, sliderH);
 
-    newSliders[4] = new Slider(false, "Elitism", 0, 25, sliderW, sliderH);
+    newSliders[4] = new Slider(false, "Elitism", 0, 3, sliderW, sliderH);
 
     newSliders[5] = new Slider(false, "Maximum Shapes", 1, 10, sliderW, sliderH);
 

@@ -134,7 +134,8 @@ class EvolutionScreen {
     algorithmWindow.show();
   }
 
-  void showEvolutionGrid() {
+  void showEvolutionGrid() { //
+    imageMode(CORNER);
     int row = 0, col = 0;
     for (int i = 0; i < evoPopulation.individuals.length; i++) {
       if (i == 0) fill(white);

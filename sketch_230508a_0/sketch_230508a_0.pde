@@ -1,7 +1,11 @@
 //colisao -> 0/1 soma
 //questionarios 
 
-float mutation_rate = 0.5;
+//canvas -> tint -> multiply()
+
+//capture
+import processing.video.*;
+Capture video;
 
 //colors
 
@@ -37,6 +41,7 @@ EvolutionScreen evolutionScreen;
 ArchiveScreen archiveScreen;
 
 int currentScreen = 0;
+int previousScreen = 0;
 
 Button pressedButton;
 
@@ -55,6 +60,10 @@ void settings() {
 void setup() {
   //gap = width/240;
   frameRate(120);
+
+  video = new Capture(this, 1280, 720);
+  video.start();
+
   loadFonts();
   objectsHighRes = loadObjects(objectResolutionHigh);
   objectsLowRes = loadObjects(objectResolutionLow);
@@ -80,6 +89,11 @@ void draw() {
 
   header.update();
 
+  if (previousScreen != currentScreen) {
+    if (currentScreen == 0) video.start();
+    else video.stop();
+  }
+
   pushMatrix();
   translate(mainPadding, header.h + mainPadding);
   switch(currentScreen) {
@@ -100,6 +114,8 @@ void draw() {
 
   header.show();
   console.show();
+
+  previousScreen = currentScreen;
 }
 
 void mouseReleased() {

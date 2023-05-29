@@ -11,8 +11,11 @@ class Individual {
     randomize(currentShapes);
   }
 
-  Individual(ArrayList _genes, int _maxShapes) {
-    genes = _genes;
+  Individual(ArrayList<Float> _genes, int _maxShapes) {
+    genes = new ArrayList<Float>();
+    for (int i = 0; i < _genes.size(); i++) {
+      genes.add(_genes.get(i));
+    }
     maxShapes = _maxShapes;
   }
 
@@ -92,7 +95,7 @@ class Individual {
       
       canvas.translate(genes.get(index + 1) * w,genes.get(index + 2) * h);
       
-      canvas.scale(genes.get(index + 3));
+      canvas.scale(genes.get(index + 3) * 0.4); //0-1
       
       canvas.rotate(genes.get(index + 4) * TWO_PI);
       
@@ -116,6 +119,7 @@ class Individual {
   }
 
   Individual getCopy() {
+    
     Individual copy = new Individual(genes, maxShapes);
     copy.fitness = fitness;
     return copy;
