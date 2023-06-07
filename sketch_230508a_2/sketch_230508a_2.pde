@@ -4,7 +4,6 @@ import processing.video.*;
 Capture video;
 
 //colors
-
 color white = color(255);
 color black = color(0);
 color lightGray = color(235);
@@ -12,12 +11,10 @@ color gray = color (215);
 color darkGray = color(110);
 
 //measurements
-
 int gap = 8; //measurement unit
 int mainPadding = gap * 4;
 
 //typography
-
 int fontSizeTiny = 10;
 int fontSizeSmall = 16;
 int fontSizeMedium = 24;
@@ -29,7 +26,6 @@ PFont fontWeightRegular;
 PFont fontWeightBold;
 
 //major components
-
 Header header;
 Console console;
 
@@ -43,11 +39,11 @@ int previousScreen = 0;
 Button pressedButton;
 
 //objects
-
 PImage objectsHighRes[];
 PImage objectsLowRes[];
 int objectResolutionHigh = 500;
 int objectResolutionLow = 300;
+int[] enabledShapeIndexes;
 
 void settings() {
   //size(1080, 720);

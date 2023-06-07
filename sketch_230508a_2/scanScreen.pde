@@ -39,6 +39,7 @@ class ScanScreen {
     savedW = w - captureW - mainPadding * 2;
     calculateSavedObjectsGrid();
     createShapesButtons();
+    setEnabledShapeIndexes();
   }
 
   void update() {
@@ -119,13 +120,14 @@ class ScanScreen {
 
     popMatrix();
   }
-  
-  void updateShapeButtons(){
+
+  void updateShapeButtons() {
     for (int i = 0; i < shapeButtons.length; i++) {
       shapeButtons[i].update();
-      if(shapeButtons[i].selected){
+      if (shapeButtons[i].selected) {
         shapeButtons[i].setSelectedState(false);
         shapeButtons[i].toggleEnabledState();
+        setEnabledShapeIndexes();
         return;
       }
     }
@@ -140,9 +142,9 @@ class ScanScreen {
 
     int row = 0, col = 0;
     for (int i = 0; i < shapeButtons.length; i++) {
-      
+
       shapeButtons[i].show();
-      
+
       col += 1;
       if (col >= savedGrid[row].length) {
         row += 1;
@@ -211,37 +213,33 @@ class ScanScreen {
 
     for (int i = 0; i < objectsLowRes.length; i++) {
       newShapeButtons[i] = new Button(objectsLowRes[i], savedGrid[row][col].x, savedGrid[row][col].y, savedGrid[row][col].z, savedGrid[row][col].z);
-      
-      if(shapeButtons != null && i < shapeButtons.length) newShapeButtons[i].setEnabledState(shapeButtons[i].getEnabled());
-      
+
+      if (shapeButtons != null && i < shapeButtons.length) newShapeButtons[i].setEnabledState(shapeButtons[i].getEnabled());
+
       col += 1;
       if (col >= savedGrid[row].length) {
         row += 1;
         col = 0;
       }
     }
-    
+
     shapeButtons = newShapeButtons;
   }
-  
-  PImage[] getEnabledSavedShaped(){
-   ArrayList<PImage> enabledShapes = new ArrayList<PImage>();
-   PImage[] finalEnabledShapes;
-   
-   for(int i = 0; i < shapeButtons.length; i++){
-     if(shapeButtons[i].getEnabled()) enabledShapes.add(shapeButtons[i].buttonImage);
-   }
-   
-   if(enabledShapes.size() < 1) return null;
-   
-   finalEnabledShapes = new PImage[enabledShapes.size()];
-   
-   for(int i = 0; i < enabledShapes.size(); i ++){
-     finalEnabledShapes[i] = enabledShapes.get(i);
-   }
-   
-   return finalEnabledShapes;
+
+  void setEnabledShapeIndexes() {
+    ArrayList<Integer> enabledShapesIndexes = new ArrayList<Integer>();
+    int[] finalEnabledShapesIndexes;
+
+    for (int i = 0; i < shapeButtons.length; i++) {
+      if (shapeButtons[i].getEnabled()) enabledShapesIndexes.add(i);
+    }
+
+    finalEnabledShapesIndexes = new int[enabledShapesIndexes.size()];
+
+    for (int i = 0; i < enabledShapesIndexes.size(); i ++) {
+      finalEnabledShapesIndexes[i] = enabledShapesIndexes.get(i);
+    }
+
+    enabledShapeIndexes = finalEnabledShapesIndexes;
   }
-  
-  
 }

@@ -2,6 +2,8 @@ import java.util.*;
 
 class Population {
 
+  String targetGlyph;
+  
   Individual[] individuals;
   int generations;
   Evaluator evaluator;
@@ -15,7 +17,9 @@ class Population {
   int startTimeMS;
   String elapsedTime = "0s";
 
-  Population(PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
+  Population(String _glyph, PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize) {
+    targetGlyph = _glyph;
+    
     individuals = new Individual[_populationSize];
     evaluator = new Evaluator(_referenceImage);
 
@@ -25,6 +29,7 @@ class Population {
     tournamentSize = _tournamentSize;
 
     maxShapes = _maxShapes;
+
     initialize(_maxShapes);
   }
 

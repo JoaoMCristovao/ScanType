@@ -23,7 +23,6 @@ class Individual {
   }
 
   void randomize(int nShapes) { //imgId, x, y, scale, rot
-
     int nGenes = nShapes * genesPerShape;
     genes = new ArrayList<Float>();
 
@@ -45,8 +44,7 @@ class Individual {
         break;
       }
     }
-    
-    
+
     return child;
   }
 
@@ -78,7 +76,7 @@ class Individual {
     }
   }
 
-  PImage getPhenotype(boolean res, boolean hasBG) {
+  PImage getPhenotype(boolean res, boolean hasBG) {//needs background if using blendMode(MULTIPLY)
     int resolution = objectResolutionLow;
     if (res) resolution = objectResolutionHigh;
     PGraphics canvas = createGraphics(resolution, resolution);
@@ -89,23 +87,25 @@ class Individual {
     return canvas;
   }
 
-  void render(PGraphics canvas, float w, float h, boolean res) { //imgId, x, y, scale, rot, layer
+  void render(PGraphics canvas, float w, float h, boolean res) { 
     canvas.noStroke();
     canvas.blendMode(MULTIPLY);
+    
+    if(enabledShapeIndexes.length < 1) return;
 
     for (int i = 0; i < getNShapes(); i++) {
       int index = i * genesPerShape;
       canvas.pushMatrix();
-      int imgIndex = constrain(floor(genes.get(index) * objectsHighRes.length), 0, objectsHighRes.length-1);
+      int imgIndexesIndex = constrain(floor(genes.get(index) * enabledShapeIndexes.length), 0, enabledShapeIndexes.length-1);
+      int imgIndex = enabledShapeIndexes[imgIndexesIndex];
 
       canvas.translate(genes.get(index + 1) * w, genes.get(index + 2) * h);
 
-      canvas.scale( 0.2 + genes.get(index + 3) * 0.4);
+      canvas.scale( 0.2 + genes.get(index + 3) * 1);
 
       canvas.rotate(genes.get(index + 4) * TWO_PI);
 
-
-      int layer = floor(genes.get(index + 5) * nLayers);
+      int layer = floor(constrain(genes.get(index + 5) * nLayers, 0, nLayers-0.01));
 
       switch(layer) {
       case 0: 

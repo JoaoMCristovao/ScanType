@@ -7,7 +7,7 @@ class EvolutionScreen {
   float boxLeftW = 0.25;
   float boxLeftPadding = gap * 3;
   Button evoStartButton;
-  Button saveButton;
+  Button exportButton;
 
   //algorithm window
   AlgorithmWindow algorithmWindow;
@@ -29,7 +29,7 @@ class EvolutionScreen {
     h = _h;
 
     evoStartButton = new Button("Start Evolving", true, 0, h - gap * 7, w * boxLeftW, gap * 7, fontSizeMedium);
-    saveButton = new Button("Save glyph to archive", true, w * boxLeftW - gap * 24 - boxLeftPadding, h - gap * 14, gap * 24, gap * 4, fontSizeSmall);
+    exportButton = new Button("Save glyph to archive", true, w * boxLeftW - gap * 24 - boxLeftPadding, h - gap * 14, gap * 24, gap * 4, fontSizeSmall);
 
     alphabetButtons = createAlphabetButtons();
 
@@ -40,6 +40,7 @@ class EvolutionScreen {
 
   void update() {
     evoStartButton.update();
+    updateExportButton();
 
     if (evoStartButton.getSelected() && !evoStartButton.getEnabled()) { //Started evolving
       evoStartButton.setSelectedState(false);
@@ -81,13 +82,21 @@ class EvolutionScreen {
     evoStartButton.show();
   }
 
+  void updateExportButton() {
+    exportButton.update();
+    if (exportButton.getSelected()) {
+      exportButton.setSelectedState(false);
+      exportIndividual(0);
+    }
+  }
+
   void showBestIndividual() {
     noFill();
     stroke(black);
 
     float sideSize = w * boxLeftW - gap * 6;
     float bestX = boxLeftPadding;
-    float bestY = saveButton.y - gap - sideSize;
+    float bestY = exportButton.y - gap - sideSize;
 
     imageMode(CORNER);
 
@@ -101,7 +110,7 @@ class EvolutionScreen {
 
     square(bestX, bestY, sideSize);
 
-    saveButton.show();
+    exportButton.show();
   }
 
   void showSettings() {
@@ -220,8 +229,7 @@ class EvolutionScreen {
   }
 
   boolean startNewEvolution() {
-    PImage[] savedShapes = scanScreen.getEnabledSavedShaped(); //TODO todo enable only these shapes
-    if (savedShapes == null) {
+    if (enabledShapeIndexes.length < 1) {
       console.setMessage("No shapes enabled. Select some in the scan screen to start evolving.");
       return false;
     }
@@ -238,7 +246,7 @@ class EvolutionScreen {
 
     evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
 
-    evoPopulation = new Population(referenceImage, popSize, maxShapes, eliteSize, mutation, crossover, tournamentSize);
+    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, maxShapes, eliteSize, mutation, crossover, tournamentSize);
     if (glyphToEvolve.length() > 1) glyphToEvolve = glyphToEvolve.substring( 0, glyphToEvolve.length()-1 );
     console.setMessage("Started evolution towards letter " + glyphToEvolve);
     evolutionStartTimeMS = millis();
@@ -282,6 +290,17 @@ class EvolutionScreen {
     return newButtons;
   }
 
-  void exportIndividual() {
+  void exportIndividual(int index) {
+    if (evoPopulation == null || index >= evoPopulation.getSize()) {
+      console.setMessage("Individual not found. Try starting an evolution first.");
+      return;
+    }
+    String filename = evoPopulation.targetGlyph + "-" + year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" +
+      nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+    String path = sketchPath("outputs/" + filename);
+
+    evoPopulation.getIndiv(index).getPhenotype(true, false).save(path + ".png");
+
+    console.setMessage("Exported " + filename);
   }
 }
