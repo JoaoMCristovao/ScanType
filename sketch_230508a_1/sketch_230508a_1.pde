@@ -67,8 +67,8 @@ void setup() {
   video.start();
 
   loadFonts();
-  objectsHighRes = loadObjects(objectResolutionHigh);
-  objectsLowRes = loadObjects(objectResolutionLow);
+  loadObjects();
+
 
   textFont(fontWeightRegular);
 
@@ -126,8 +126,9 @@ void mouseReleased() {
   pressedButton = null;
 }
 
-void keyPressed() { //sliders / shortcuts
-  
+void loadObjects() {
+  objectsHighRes = loadObjects(objectResolutionHigh);
+  objectsLowRes = loadObjects(objectResolutionLow);
 }
 
 void loadFonts() {

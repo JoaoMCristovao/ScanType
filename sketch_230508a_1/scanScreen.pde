@@ -135,9 +135,9 @@ class ScanScreen {
 
       float toScale = 0;
       if (objectsLowRes[i].width > objectsLowRes[i].height) {
-        toScale = objectsLowRes[i].width / savedGrid[row][col].z;
+        toScale = objectsLowRes[i].width / (savedGrid[row][col].z * 0.6);
       } else {
-        toScale = objectsLowRes[i].height / savedGrid[row][col].z;
+        toScale = objectsLowRes[i].height / (savedGrid[row][col].z * 0.6);
       }
       toScale = 1/toScale;
       scale(toScale);
@@ -147,7 +147,8 @@ class ScanScreen {
       imageMode(CENTER);
       tint(0);
 
-      image(objectsLowRes[i], 0, 0, savedGrid[row][col].z, savedGrid[row][col].z);
+      image(objectsLowRes[i], 0, 0);
+      
       popMatrix();
       col += 1;
       if (col >= savedGrid[row].length) {
@@ -207,7 +208,12 @@ class ScanScreen {
     imageMode(CORNER);
 
     canvas.beginDraw();
-    canvas.image(src, 0, 0);
+    canvas.pushMatrix();
+    canvas.translate(canvas.width, 0);
+    canvas.scale(-1,1);
+    canvas.imageMode(CENTER);
+    canvas.image(src, canvas.width/2, canvas.height/2);
+    canvas.popMatrix();
     canvas.filter(THRESHOLD, thresholdSlider.currentValue);
     canvas.filter(INVERT);
     canvas.endDraw();
