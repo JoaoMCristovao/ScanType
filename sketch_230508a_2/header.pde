@@ -5,14 +5,13 @@ class Header {
   int page;
 
   Button scanButton, evolutionButton, archiveButton;
-  Button[] headerButtons = new Button[3];
+  Button[] headerButtons = new Button[2];
 
   Header(float _h) {
     h = _h;
 
-    headerButtons[0] = new Button("Scan Object", false, width - 108*gap, 0, 37*gap, h, fontSizeBig);
-    headerButtons[1] = new Button("Evolve Letters", false, width - 72*gap, 0, 37*gap, h, fontSizeBig);
-    headerButtons[2] = new Button("Letter Archive", false, width - 36*gap, 0, 37*gap, h, fontSizeBig);
+    headerButtons[0] = new Button("Scan Object", false, width - 72*gap, 0, 37*gap, h, fontSizeBig);
+    headerButtons[1] = new Button("Evolve Letters", false, width - 36*gap, 0, 37*gap, h, fontSizeBig);
 
     headerButtons[0].setEnabledState(true);
   }

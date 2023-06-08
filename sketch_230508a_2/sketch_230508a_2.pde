@@ -1,5 +1,3 @@
-//questionarios
-
 import processing.video.*;
 Capture video;
 
@@ -31,7 +29,6 @@ Console console;
 
 ScanScreen scanScreen;
 EvolutionScreen evolutionScreen;
-ArchiveScreen archiveScreen;
 
 int currentScreen = 0;
 int previousScreen = 0;
@@ -45,8 +42,10 @@ int objectResolutionHigh = 500;
 int objectResolutionLow = 300;
 int[] enabledShapeIndexes;
 
+//exports
+PImage[][] exports;
+
 void settings() {
-  //size(1080, 720);
   fullScreen();
 }
 
@@ -70,7 +69,6 @@ void setup() {
 
   scanScreen = new ScanScreen(screenWidth, screenHeight);
   evolutionScreen = new EvolutionScreen(screenWidth, screenHeight);
-  archiveScreen = new ArchiveScreen(screenWidth, screenHeight);
 
   header = new Header(headerHeight);
   console = new Console(consoleHeight);
@@ -96,10 +94,6 @@ void draw() {
   case 1: 
     evolutionScreen.update();
     evolutionScreen.show();
-    break;
-  case 2: 
-    archiveScreen.update();
-    archiveScreen.show();
     break;
   }
   popMatrix();
@@ -184,4 +178,21 @@ PVector[][] calculateGrid(int cells, float x, float y, float w, float h, float m
     }
   }
   return positions;
+}
+
+void loadExports() {
+  String directory = "outputs/";
+
+  File f = dataFile(directory);
+  String[] names = f.list();
+
+  String alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+  int[] nExportsPerLetter = new int[alphabet.length() * 2];
+
+  for (int i = 0; i < names.length; i++) {
+    for (int a = 0; a < alphabet.length(); a++) {
+      
+    }
+  }
 }

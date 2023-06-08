@@ -16,6 +16,9 @@ class EvolutionScreen {
   Button[][] alphabetButtons;
   float alphabetH;
   float alphabetW;
+  
+  //font buttons
+  Button[] fontButtons;
 
   //evolution
   boolean evolving;
@@ -32,6 +35,7 @@ class EvolutionScreen {
     exportButton = new Button("Save glyph to archive", true, w * boxLeftW - gap * 24 - boxLeftPadding, h - gap * 14, gap * 24, gap * 4, fontSizeSmall);
 
     alphabetButtons = createAlphabetButtons();
+    fontButtons = createFontButtons();
 
     evoGridPos = new PVector(boxLeftW * w + mainPadding, alphabetH + mainPadding);
 
@@ -289,6 +293,12 @@ class EvolutionScreen {
 
     return newButtons;
   }
+  
+  Button[] createFontButtons(){
+    
+    return new Button[5];
+    
+  }
 
   void exportIndividual(int index) {
     if (evoPopulation == null || index >= evoPopulation.getSize()) {
@@ -297,10 +307,10 @@ class EvolutionScreen {
     }
     String filename = evoPopulation.targetGlyph + "-" + year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" +
       nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
-    String path = sketchPath("outputs/" + filename);
+    String path = sketchPath("data/outputs/" + filename);
 
     evoPopulation.getIndiv(index).getPhenotype(true, false).save(path + ".png");
 
-    console.setMessage("Exported " + filename);
+    console.setMessage("Exported to folder outputs: " + filename);
   }
 }

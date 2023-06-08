@@ -3,7 +3,7 @@ class ScanScreen {
   float w, h;
 
   //capture
-  float captureY = gap * 30;
+  float captureY = gap * 8 + mainPadding;
   float captureW = gap * 70; //70
   PGraphics captureImg;
   Button saveShapeButton;
@@ -48,7 +48,7 @@ class ScanScreen {
   void show() {
     showCapture();
     showSaveButton();
-    runFilterSelection();
+    //runFilterSelection();
     runSlider();
     updateShapeButtons();
     showShapeButtons();
@@ -114,7 +114,7 @@ class ScanScreen {
   void runSlider() {
     pushMatrix();
 
-    translate(0, filterH + mainPadding);
+    translate(0, -gap*2);
     thresholdSlider.update();
     thresholdSlider.show();
 
