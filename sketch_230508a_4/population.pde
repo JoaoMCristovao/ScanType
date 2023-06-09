@@ -12,14 +12,17 @@ class Population {
   float crossoverRate;
   int tournamentSize;
   float mutationRate;
+  int minShapes;
   int maxShapes;
+  float minShapeSize;
+  float maxShapeSize;
   
   boolean isColoured;
 
   int startTimeMS;
   String elapsedTime = "0s";
 
-  Population(String _glyph, PImage _referenceImage, int _populationSize, int _maxShapes, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize, boolean _isColoured) {
+  Population(String _glyph, PImage _referenceImage, int _populationSize, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize, boolean _isColoured) {
     targetGlyph = _glyph;
     
     individuals = new Individual[_populationSize];
@@ -30,17 +33,21 @@ class Population {
     crossoverRate = _crossoverRate;
     tournamentSize = _tournamentSize;
 
+    minShapes = _minShapes;
     maxShapes = _maxShapes;
+    
+    minShapeSize = _minShapeSize;
+    maxShapeSize = _maxShapeSize;
     
     isColoured = _isColoured;
 
-    initialize(_maxShapes);
+    initialize();
   }
 
-  void initialize(int _maxShapes) {
+  void initialize() {
 
     for (int i = 0; i < individuals.length; i++) {
-      individuals[i] = new Individual(_maxShapes, isColoured);
+      individuals[i] = new Individual(minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured);
       float fitness = evaluator.calculateFitness(individuals[i]);
       individuals[i].setFitness(fitness);
     }
@@ -135,8 +142,10 @@ class Population {
   int getGenerations() {
     return generations;
   }
-
-
+  
+  int getPopulationSize() {
+     return individuals.length; 
+  }
 
   void calculateElapsedTime() {
     int elapsedMS = millis() - startTimeMS;

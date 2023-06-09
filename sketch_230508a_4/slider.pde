@@ -1,8 +1,8 @@
 class Slider {
   boolean isPercentage;
   String legend;
-  int minVal;
-  int maxVal;
+  float minVal;
+  float maxVal;
   float w, h;
 
   float currentValue;
@@ -10,8 +10,10 @@ class Slider {
   float sidePadding = 5 * gap;
   boolean hovered;
   float lineHeight;
+  
+  boolean isInt;
 
-  Slider(boolean _isPercentage, String _legend, int _minVal, int _maxVal, float _w, float _h, float _initialVal) {
+  Slider(boolean _isPercentage, String _legend, float _minVal, float _maxVal, float _w, float _h, float _initialVal, boolean _isInt) {
     isPercentage = _isPercentage;
     legend = _legend;
     minVal = _minVal;
@@ -19,6 +21,7 @@ class Slider {
     w = _w;
     h = _h;
     currentValue = _initialVal;
+    isInt = _isInt;
     
     lineHeight = h - h/6;
   }
@@ -40,13 +43,16 @@ class Slider {
     if(isPercentage) currentLegend += "%";
     text(currentLegend, 0, h/2);
     
+    //minValue
     textSize(fontSizeTiny);
     textAlign(LEFT, CENTER);
-    text(minVal, 0, lineHeight - fontSizeTiny/5);
+    if(isInt)text(int(minVal), 0, lineHeight - fontSizeTiny/5);
+    else text(nf(minVal, 0, 2), 0, lineHeight - fontSizeTiny/5);
     
-    
+    //maxValue
     textAlign(RIGHT, CENTER);
-    text(maxVal, w, lineHeight - fontSizeTiny/5);
+    if(isInt)text(int(maxVal), w, lineHeight - fontSizeTiny/5);
+    else text(nf(maxVal,0,2), w, lineHeight - fontSizeTiny/5);
     
     float lineLength = w - sidePadding*2;
     strokeWeight(lineWeight);
@@ -61,7 +67,8 @@ class Slider {
 
   float getValue() {
     float val = (maxVal - minVal) * currentValue + minVal;
-    return int(val);
+    if(isInt) return int(val);
+    else return val;
   }
 
   void setMin(int val) {

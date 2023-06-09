@@ -6,27 +6,39 @@ class Individual {
   float fitness;
   ArrayList<Float> genes;
 
+  int minShapes;
   int maxShapes;
+  float minShapeSize;
+  float maxShapeSize;
   boolean isColoured;
 
-  Individual(int _maxShapes, boolean _isColoured) {
+  Individual(int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured) {
+    minShapes = _minShapes;
     maxShapes = _maxShapes;
+    
+    minShapeSize = _minShapeSize;
+    maxShapeSize = _maxShapeSize;
+    
     isColoured = _isColoured;
-    int currentShapes = floor(random(1, _maxShapes));
+    
+    int currentShapes = floor(random(_minShapes, _maxShapes));
     randomize(currentShapes);
   }
 
-  Individual(ArrayList<Float> _genes, int _maxShapes, boolean _isColoured) {
-    genes = new ArrayList<Float>();
+  Individual(ArrayList<Float> _genes, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured) {
+    genes = new ArrayList<Float>(); 
     for (int i = 0; i < _genes.size(); i++) {
       genes.add(_genes.get(i));
     }
+    minShapes = _minShapes;
     maxShapes = _maxShapes;
+    minShapeSize = _minShapeSize;
+    maxShapeSize = _maxShapeSize;
     isColoured = _isColoured;
   }
 
-  void randomize(int nShapes) { //imgId, x, y, scale, rot
-    int nGenes = nShapes * genesPerShape;
+  void randomize(int _nShapes) { //imgId, x, y, scale, rot
+    int nGenes = _nShapes * genesPerShape;
     genes = new ArrayList<Float>();
 
     for (int i = 0; i < nGenes; i++) {
@@ -37,7 +49,7 @@ class Individual {
   }
 
   Individual onePointCrossover(Individual partner) {
-    Individual child = new Individual(maxShapes, isColoured);
+    Individual child = new Individual(minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured);
     int crossoverPoint = int(random(1, genes.size() - 1));
 
     for (int i = 0; i < child.genes.size(); i++) {
@@ -74,14 +86,14 @@ class Individual {
   }
 
   void removeShape() {
-    if (getNShapes() <= 1) return;
+    if (getNShapes() <= minShapes) return;
     int index = floor(random (getNShapes())) * genesPerShape;
     for (int i = index; i < index + genesPerShape; i++) {
       genes.remove(index);
     }
   }
 
-  PImage getPhenotype(boolean res, boolean hasBG) {//needs background if using blendMode(MULTIPLY)
+  PImage getPhenotype(boolean res) {
     int resolution = objectResolutionLow;
     if (res) resolution = objectResolutionHigh;
     PGraphics canvas = createGraphics(resolution, resolution);
@@ -114,7 +126,7 @@ class Individual {
 
       canvas.translate(x * cellSize, y * cellSize);
 
-      canvas.scale(0.1 + genes.get(index + 3) * 0.8);
+      canvas.scale(minShapeSize + genes.get(index + 3) * (maxShapeSize - minShapeSize));
 
       canvas.rotate(genes.get(index + 4) * TWO_PI);
 
@@ -181,7 +193,7 @@ class Individual {
   }
 
   Individual getCopy() {
-    Individual copy = new Individual(genes, maxShapes, isColoured);
+    Individual copy = new Individual(genes, minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured);
     copy.fitness = fitness;
     return copy;
   }

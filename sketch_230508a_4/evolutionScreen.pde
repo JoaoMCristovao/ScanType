@@ -110,7 +110,7 @@ class EvolutionScreen {
     imageMode(CORNER);
 
     if (evoPopulation != null) {
-      image(evoPopulation.getIndiv(0).getPhenotype(true, false), bestX, bestY, sideSize, sideSize);
+      image(evoPopulation.getIndiv(0).getPhenotype(true), bestX, bestY, sideSize, sideSize);
     }
 
     tint(255, 20);
@@ -131,10 +131,11 @@ class EvolutionScreen {
       info =
         "Current Generation: " + evoPopulation.getGenerations() +
         "\nElapsed Time: " + evoPopulation.getElapsedTime() +
-        "\n\nMax Shapes: " + evoPopulation.maxShapes +
+        "\n\nNumber of Shapes: " + evoPopulation.minShapes + " – " + evoPopulation.maxShapes +
+        "\nSize of Shapes: " + nf(evoPopulation.minShapeSize, 0, 2) + " – " + nf(evoPopulation.maxShapeSize, 0, 2) +
         "\nPopulation Size: " + evoPopulation.individuals.length +
-        "\nMutation Rate: " + evoPopulation.mutationRate*100 + "%" +
-        "\nCrossover Rate: " + evoPopulation.crossoverRate*100 + "%" +
+        "\nMutation Rate: " + int(evoPopulation.mutationRate*100) + "%" +
+        "\nCrossover Rate: " + int(evoPopulation.crossoverRate*100) + "%" +
         "\nTournament Size: " + evoPopulation.tournamentSize +
         "\nElitism: " + evoPopulation.eliteSize +
         "\n\nBest Fitness: " + evoPopulation.getIndiv(0).getFitness();
@@ -142,7 +143,8 @@ class EvolutionScreen {
       info =
         "Current Generation: -" +
         "\nElapsed Time: -" +
-        "\n\nMax Shapes: -" +
+        "\n\nNumber of Shapes: -" +
+        "\nSize of Shapes: -" +
         "\nPopulation Size: -" +
         "\nMutation Rate: -" +
         "\nCrossover Rate: -" +
@@ -168,7 +170,7 @@ class EvolutionScreen {
     stroke(black);
     int row = 0, col = 0;
     for (int i = 0; i < evoPopulation.individuals.length; i++) {
-      if (evoPopulation != null) image(evoPopulation.getIndiv(i).getPhenotype(false, false), evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
+      if (evoPopulation != null) image(evoPopulation.getIndiv(i).getPhenotype(false), evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
       rect(evoGrid[row][col].x, evoGrid[row][col].y, evoGrid[row][col].z, evoGrid[row][col].z);
       col += 1;
       if (col >= evoGrid[row].length) {
@@ -284,17 +286,21 @@ class EvolutionScreen {
     PImage referenceImage = getReferenceImage(glyphToEvolve);
 
     int popSize = int(algorithmWindow.getPopulation());
+    int minShapes = int(algorithmWindow.getMinimumShapes());
     int maxShapes = int(algorithmWindow.getMaximumShapes());
+    float minShapeSize = algorithmWindow.getMinimumShapeSize();
+    float maxShapeSize = algorithmWindow.getMaximumShapeSize();
     int eliteSize = int(algorithmWindow.getElitism());
     float mutation = algorithmWindow.getMutationRate();
     float crossover = algorithmWindow.getCrossoverRate();
     int tournamentSize = int(algorithmWindow.getTournamentSize());
     
+    
     boolean isColoured = algorithmWindow.getColouredState();
 
     evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
 
-    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, maxShapes, eliteSize, mutation, crossover, tournamentSize, isColoured);
+    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured);
     if (glyphToEvolve.length() > 1) glyphToEvolve = glyphToEvolve.substring( 0, glyphToEvolve.length()-1 );
     console.setMessage("Started evolution towards letter " + glyphToEvolve);
     evolutionStartTimeMS = millis();
@@ -393,11 +399,11 @@ class EvolutionScreen {
       console.setMessage("Individual not found. Try starting an evolution first.");
       return;
     }
-    String filename = evoPopulation.targetGlyph + "-" + getEnabledFontFolder().trim() + "-" + "-" + year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" +
-      nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+    String filename = evoPopulation.targetGlyph + "-gen_" + evoPopulation.getGenerations() + "-pop_" + evoPopulation.getPopulationSize() + "-mut_" + nf(evoPopulation.mutationRate, 0, 2) + 
+    "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + evoPopulation.minShapeSize + "_" + evoPopulation.maxShapeSize;
     String path = sketchPath("data/outputs/" + filename);
 
-    evoPopulation.getIndiv(index).getPhenotype(true, false).save(path + ".png");
+    evoPopulation.getIndiv(index).getPhenotype(true).save(path + ".png");
 
     console.setMessage("Exported to folder outputs: " + filename);
   }

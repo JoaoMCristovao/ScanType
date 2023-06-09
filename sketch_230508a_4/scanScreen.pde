@@ -26,7 +26,7 @@ class ScanScreen {
     w = _w;
     h = _h;
 
-    thresholdSlider = new Slider(false, "Threshold", 0, 255, captureW, gap * 10, 0.5);
+    thresholdSlider = new Slider(false, "Threshold", 0, 255, captureW, gap * 10, 0.5, true);
 
     filterButtons[0] = new Button("Binarize Image", false, 0, buttonH * 1.2, buttonW, buttonH, fontSizeSmall, LEFT, TOP);
     filterButtons[1] = new Button("Canny Edge Detector", false, 0, buttonH * 1.2 * 2, buttonW, buttonH, fontSizeSmall, LEFT, TOP);

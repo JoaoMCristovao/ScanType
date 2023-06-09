@@ -14,7 +14,7 @@ class Evaluator{
   }
   
   float calculateFitness(Individual indiv) {
-    PImage phenotype = indiv.getPhenotype(false, true);
+    PImage phenotype = indiv.getPhenotype(false);
     int[] phenotypePixelsBrightness = getPixelsBrightness(phenotype);
     float similarity = getSimilarityRMSE(targetPixelsBrightness, phenotypePixelsBrightness, 255);
     float distributionValue = 0.5 + 0.5 *indiv.getLayerDistribution();
