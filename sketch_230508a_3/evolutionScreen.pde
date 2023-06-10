@@ -220,7 +220,7 @@ class EvolutionScreen {
   void runFontButtons() {
     pushMatrix();
 
-    translate(w * boxLeftW + mainPadding, gap*2 + alphabetH);
+    translate(w * boxLeftW * 2.5 + mainPadding, gap*2 + alphabetH);
     for (int i = 0; i < fontButtons.length; i ++) {
 
       fontButtons[i].update();

@@ -105,7 +105,7 @@ class Individual {
 
       canvas.translate(0.2 * w + genes.get(index + 1) * w * 0.8, 0.2 * h + genes.get(index + 2) * h * 0.8);
 
-      canvas.scale(0.2 + genes.get(index + 3) * 0.8);
+      canvas.scale(0.2 + genes.get(index + 3) * 0.2);
 
       canvas.rotate(genes.get(index + 4) * TWO_PI);
 
