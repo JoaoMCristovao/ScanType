@@ -119,21 +119,21 @@ class AlgorithmWindow {
     float sliderW = w/2 - gap * 4;
     float sliderH = (h - gap * 10) / newSliders.length;
 
-    newSliders[0] = new Slider(false, "Population Size", 5, 200, sliderW, sliderH, 0.8, true);
+    newSliders[0] = new Slider(false, "Population Size", 5, 200, sliderW, sliderH, 0.5, true);
 
-    newSliders[1] = new Slider(true, "Mutation Rate", 0, 100, sliderW, sliderH, 0.5, true);
+    newSliders[1] = new Slider(true, "Mutation Rate", 0, 100, sliderW, sliderH, 0.20, true);
 
-    newSliders[2] = new Slider(true, "Crossover Rate", 0, 100, sliderW, sliderH, 0.85, true);
+    newSliders[2] = new Slider(true, "Crossover Rate", 0, 100, sliderW, sliderH, 0.30, true);
 
     newSliders[3] = new Slider(false, "Tournament Size", 1, 25, sliderW, sliderH, 0.25, true);
 
-    newSliders[4] = new Slider(false, "Elitism", 1, 4, sliderW, sliderH, 0, true);
+    newSliders[4] = new Slider(false, "Elitism", 0, 4, sliderW, sliderH, 0, true);
 
     newSliders[5] = new Slider(false, "Minimum Shapes", 1, 10, sliderW, sliderH, 0, true);
 
-    newSliders[6] = new Slider(false, "Maximum Shapes", 1, 15, sliderW, sliderH, 0.8, true);
+    newSliders[6] = new Slider(false, "Maximum Shapes", 1, 40, sliderW, sliderH, 0.8, true);
 
-    newSliders[7] = new Slider(false, "Minimum Shape Size", 0, 1, sliderW, sliderH, 0, false);
+    newSliders[7] = new Slider(false, "Minimum Shape Size", 0, 1, sliderW, sliderH, 0.3, false);
 
     newSliders[8] = new Slider(false, "Maximum Shape Size", 0, 1, sliderW, sliderH, 0.4, false);
 

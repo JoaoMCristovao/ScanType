@@ -4,7 +4,7 @@ class ScanScreen {
 
   //capture
   float captureY = gap * 8 + mainPadding;
-  float captureW = gap * 70; //70
+  float captureW = gap * 50; //70
   PGraphics captureImg;
   Button saveShapeButton;
 
@@ -188,7 +188,7 @@ class ScanScreen {
     toExport.filter(INVERT);
     toExport.loadPixels();
     for (int i = 0; i < toExport.width * toExport.height; i++) {
-      if (brightness(toExport.pixels[i]) < 230) toExport.pixels[i] = color(0, 0, 0, 0);
+      if (brightness(toExport.pixels[i]) < 230) toExport.pixels[i] = color(0, 0, 0, 0); //perguntar
     }
     toExport.updatePixels();
 

@@ -106,7 +106,7 @@ class Individual {
 
   void render(PGraphics canvas, float w, float h, boolean res) {
     canvas.noStroke();
-    if (isColoured) canvas.blendMode(MULTIPLY);
+    if (isColoured) canvas.blendMode(SUBTRACT);
     else canvas.blendMode(BLEND);
 
     if (enabledShapeIndexes.length < 1) return;
@@ -135,13 +135,13 @@ class Individual {
 
         switch(layer) {
         case 0:
-          canvas.tint(255, 0, 0);
+          canvas.tint(255, 255, 0);
           break;
         case 1:
-          canvas.tint(0, 255, 0);
+          canvas.tint(0, 255, 255);
           break;
         case 2:
-          canvas.tint(0, 0, 255);
+          canvas.tint(255, 0, 255);
           break;
         }
       } else {

@@ -60,7 +60,7 @@ class EvolutionScreen {
       evoStartButton.setEnabledState(false);
       evoStartButton.setText("Start Evolving");
       console.setMessage("Stopped Evolving");
-      println(evoPopulation.getIndiv(0).genes);
+      //println(evoPopulation.getIndiv(0).genes);
       disableAlphabetButtons(false);
       evolving = false;
     } else if (evoPopulation != null && evoStartButton.getEnabled()) evoPopulation.evolve(); //Is evolving

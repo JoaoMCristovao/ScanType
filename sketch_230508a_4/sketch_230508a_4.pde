@@ -38,8 +38,8 @@ Button pressedButton;
 //objects
 PImage objectsHighRes[];
 PImage objectsLowRes[];
-int objectResolutionHigh = 500;
-int objectResolutionLow = 300;
+int objectResolutionHigh = 1000;
+int objectResolutionLow = 100;
 int[] enabledShapeIndexes;
 
 //exports
@@ -53,7 +53,8 @@ void setup() {
   //gap = width/240;
   frameRate(120);
 
-  video = new Capture(this, 1280, 720);
+ // video = new Capture(this, 1280, 720);
+  video = new Capture(this, 1920, 1080, Capture.list()[0]);
   video.start();
 
   loadFonts();
