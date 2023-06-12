@@ -21,6 +21,10 @@ class ScanScreen {
   float savedW;
   PVector[][] savedGrid;
   Button[] shapeButtons;
+  
+  //state all shape
+  Button enableAllButton;
+  Button disableAllButton;
 
   ScanScreen(float _w, float _h) {
     w = _w;
@@ -36,13 +40,33 @@ class ScanScreen {
 
     saveShapeButton = new Button("SAVE SHAPE", true, 0, 0, buttonW, buttonH*2, fontSizeSmall, CENTER, CENTER);
 
+    //enableAllButton = new Button("Enable All", true, w - buttonW*2 - gap * 6, buttonH, fontSizeSmall, CENTER, CENTER);
+    //disableAllButton = new Button("Disable All", true, w - buttonW, buttonH, fontSizeSmall, CENTER, CENTER);
+    
+                           //Button(String _buttonText, boolean _boxed, float _x, float _y, float _w, float _h, float _fontSize) {
+    enableAllButton = new Button("Enable All", true, w - buttonW - gap * 2, h - buttonH, buttonW/2, buttonH*1.5, fontSizeSmall);
+    disableAllButton = new Button("Disable All", true, w - buttonW/2, h - buttonH, buttonW/2, buttonH*1.5, fontSizeSmall);
+
     savedW = w - captureW - mainPadding * 2;
     calculateSavedObjectsGrid();
     createShapesButtons();
+    enableOnlyNShapeButtons(3);
     setEnabledShapeIndexes();
   }
 
   void update() {
+    enableAllButton.update();
+    if(enableAllButton.getSelected()){
+        enableAllButton.setSelectedState(false);
+        enableStateAllShapebuttons(true);
+        setEnabledShapeIndexes();
+    }
+    disableAllButton.update();
+    if(disableAllButton.getSelected()){
+        disableAllButton.setSelectedState(false);
+        enableStateAllShapebuttons(false);
+        setEnabledShapeIndexes();
+    }
   }
 
   void show() {
@@ -52,6 +76,8 @@ class ScanScreen {
     runSlider();
     updateShapeButtons();
     showShapeButtons();
+    enableAllButton.show();
+    disableAllButton.show();
   }
 
   void showCapture() {
@@ -68,7 +94,7 @@ class ScanScreen {
     image(captureImg, 0, 0, captureW, captureW);
 
     noFill();
-    stroke(black);
+    stroke(darkGray);
     square(0, 0, captureW);
 
     popMatrix();
@@ -203,7 +229,7 @@ class ScanScreen {
   }
 
   void calculateSavedObjectsGrid() {
-    savedGrid = calculateGrid(objectsLowRes.length, 0, 0, savedW, h, 0, gap, gap, true);
+    savedGrid = calculateGrid(objectsLowRes.length, 0, 0, savedW, h - buttonH*1.5 + gap*4, 0, gap, gap, true);
   }
 
   void createShapesButtons() {
@@ -224,6 +250,34 @@ class ScanScreen {
     }
 
     shapeButtons = newShapeButtons;
+  }
+  
+  void enableOnlyNShapeButtons(int _n){
+    if(shapeButtons.length < _n) return;
+        
+    ArrayList <Integer> indexes = new ArrayList<Integer>();
+    ArrayList <Integer> chosenIndexes = new ArrayList<Integer>();
+    
+    
+    for(int i = 0; i < shapeButtons.length; i++){
+      indexes.add(i);
+    }
+    
+    for(int i = 0; i < _n; i++){ 
+       chosenIndexes.add(indexes.get(floor(random(indexes.size()))));
+    }
+    
+    enableStateAllShapebuttons(false);
+    
+    for(int i = 0; i < chosenIndexes.size(); i++){
+       shapeButtons[chosenIndexes.get(i)].setEnabledState(true);
+    }
+  }
+  
+  void enableStateAllShapebuttons(boolean state){
+    for(int i = 0; i < shapeButtons.length; i++){
+       shapeButtons[i].setEnabledState(state); 
+    }
   }
 
   void setEnabledShapeIndexes() {

@@ -68,7 +68,7 @@ class Button {
 
     if (boxed) {
       strokeWeight(1);
-      stroke(black);
+      stroke(darkGray);
 
       if (enabled) {
         textFont(fontWeightBold); 
@@ -110,7 +110,7 @@ class Button {
     if (hovered)fill(gray);
     else fill(lightGray);
     strokeWeight(1);
-    stroke(black);
+    stroke(darkGray);
 
     rect(x, y, w, h);
 

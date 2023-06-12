@@ -11,8 +11,9 @@ class Individual {
   float minShapeSize;
   float maxShapeSize;
   boolean isColoured;
+  color[] colors;
 
-  Individual(int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured) {
+  Individual(int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured, color[] _colors) {
     minShapes = _minShapes;
     maxShapes = _maxShapes;
     
@@ -20,12 +21,13 @@ class Individual {
     maxShapeSize = _maxShapeSize;
     
     isColoured = _isColoured;
+    colors = _colors;
     
     int currentShapes = floor(random(_minShapes, _maxShapes));
     randomize(currentShapes);
   }
 
-  Individual(ArrayList<Float> _genes, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured) {
+  Individual(ArrayList<Float> _genes, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, boolean _isColoured, color[] _colors) {
     genes = new ArrayList<Float>(); 
     for (int i = 0; i < _genes.size(); i++) {
       genes.add(_genes.get(i));
@@ -35,6 +37,7 @@ class Individual {
     minShapeSize = _minShapeSize;
     maxShapeSize = _maxShapeSize;
     isColoured = _isColoured;
+    colors = _colors;
   }
 
   void randomize(int _nShapes) { //imgId, x, y, scale, rot
@@ -49,7 +52,7 @@ class Individual {
   }
 
   Individual onePointCrossover(Individual partner) {
-    Individual child = new Individual(minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured);
+    Individual child = new Individual(minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured, colors);
     int crossoverPoint = int(random(1, genes.size() - 1));
 
     for (int i = 0; i < child.genes.size(); i++) {
@@ -131,20 +134,9 @@ class Individual {
       canvas.rotate(genes.get(index + 4) * TWO_PI);
 
       if (isColoured) {
-        int layer = floor(constrain(genes.get(index + 5) * nLayers, 0, nLayers-0.01));
-
-        switch(layer) {
-        case 0:
-          canvas.tint(255, 255, 0);
-          break;
-        case 1:
-          canvas.tint(0, 255, 255);
-          break;
-        case 2:
-          canvas.tint(255, 0, 255);
-          break;
-        }
-      } else {
+        int colorIndex = floor(constrain(genes.get(index + 5) * nLayers, 0, colors.length-0.01));
+        canvas.tint(colors[colorIndex]);
+        }else{
         canvas.tint(0);
       }
 
@@ -193,7 +185,7 @@ class Individual {
   }
 
   Individual getCopy() {
-    Individual copy = new Individual(genes, minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured);
+    Individual copy = new Individual(genes, minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured, colors);
     copy.fitness = fitness;
     return copy;
   }

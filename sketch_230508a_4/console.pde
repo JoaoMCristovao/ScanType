@@ -24,11 +24,11 @@ class Console {
     fill(black);
     rect(0, height- boxHeight, width, boxHeight);
     fill(255);
-    textSize(fontSizeTiny);
+    textSize(fontSizeSmall);
     textAlign(LEFT, CENTER);
     text(messageTime + " - " + message, mainPadding/2, height- boxHeight/2);
     
     textAlign(LEFT, CENTER);
-    text("Frame rate: " + nf(frameRate, 0, 2), width - mainPadding * 3, height- boxHeight/2);
+    text("Frame rate: " + nf(frameRate, 0, 2), width - mainPadding * 5, height- boxHeight/2);
   }
 }

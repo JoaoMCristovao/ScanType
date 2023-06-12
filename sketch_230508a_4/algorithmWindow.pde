@@ -5,6 +5,9 @@ class AlgorithmWindow {
   Slider[] sliders;
   Button coloursButton;
 
+  PVector[] colorPickerLocations;
+  ColorPicker [] colorPickers;
+
   AlgorithmWindow(float _x, float _y, float _w, float _h) {
     x = _x;
     y = _y;
@@ -17,11 +20,15 @@ class AlgorithmWindow {
 
     coloursButton = createButton();
     coloursButton.setEnabledState(false);
+
+    colorPickerLocations = calculateColorPickerLocations(3, w - inputX - coloursButton.w - gap * 6, gap*3);
+    colorPickers = createColorPickers(colorPickerLocations);
   }
 
   void update() {
     updateSliders();
     updateButton();
+    if (coloursButton.getEnabled()) updateColorPickers();
   }
 
   void show() {
@@ -30,6 +37,7 @@ class AlgorithmWindow {
     showExplanation();
     showSliders();
     showButton();
+    if (coloursButton.getEnabled()) showColorPickers();
     popMatrix();
   }
 
@@ -55,23 +63,23 @@ class AlgorithmWindow {
 
   void showExplanation() {
 
-    String explanation = 
-      "■Population Size" +
+    String explanation =
+      "■ Population Size" +
       "\nNumber of individuals in your population." +
       "\n" +
-      "\n■Mutation rate" +
+      "\n ■Mutation rate" +
       "\nThis value controls the probability of introducing random changes in an individual's chromosome in order to maintain diversity in the population and explore new solutions in the search space." +
       "\n" +
-      "\n■Crossover rate" +
+      "\n ■Crossover rate" +
       "\nAlso known as recombination rate, this value refers to the probability that crossover will occur between two parent individuals during the reproduction process. It determines the likelihood of exchanging genetic material between individuals to create an offspring." +
       "\n" +
-      "\n■Tournament Size" +
+      "\n ■Tournament Size" +
       "\nThis value refers to the number of individuals selected from the population to participate in a tournament, with the individual having the best fitness being chosen as a parent." +
       "\n" +
-      "\n■Elitism" +
+      "\n ■Elitism" +
       "\nThis value defines the number of individuals from one generation that are directly carried over to the next generation without undergoing any genetic operations such as crossover or mutation." +
       "\n" +
-      "\n■Maximum shapes" +
+      "\n ■Maximum shapes" +
       "\nNumber of maximum shapes being used to draw individuals.";
     textSize(fontSizeSmall);
     textAlign(LEFT);
@@ -80,7 +88,6 @@ class AlgorithmWindow {
   }
 
   void showSliders() {
-
     pushMatrix();
     translate(inputX, 0);
     for (int i = 0; i < sliders.length; i++) {
@@ -111,6 +118,56 @@ class AlgorithmWindow {
     translate(inputX, 0);
     coloursButton.show();
     popMatrix();
+  }
+
+  void updateColorPickers() {
+    pushMatrix();
+    translate(x, y);
+    translate(inputX + coloursButton.w + gap * 4, coloursButton.y);
+    for (int i = 0; i < colorPickers.length; i++) {
+      pushMatrix();
+      translate(colorPickerLocations[i].x, 0);
+      colorPickers[i].update();
+      popMatrix();
+    }
+    popMatrix();
+  }
+
+  void showColorPickers() {
+    pushMatrix();
+    translate(inputX + coloursButton.w + gap * 4, coloursButton.y);
+    for (int i = 0; i < colorPickers.length; i++) {
+      pushMatrix();
+      translate(colorPickerLocations[i].x, 0);
+      colorPickers[i].show();
+      popMatrix();
+    }
+    popMatrix();
+  }
+
+  //x is x, y is w
+  PVector[] calculateColorPickerLocations(int _nColorPickers, float _availableW, float _gapW) {
+    PVector[] colorPickerValues = new PVector[_nColorPickers];
+
+    int nGaps = _nColorPickers - 1;
+
+    float totalColorPickerW = _availableW - (nGaps * _gapW);
+
+    float colorPickerW = totalColorPickerW / _nColorPickers;
+
+    for (int i = 0; i < _nColorPickers; i++)
+    {
+      float previousX = 0;
+      float currentX = 0;
+      if (i > 0) {
+        previousX = colorPickerValues[i - 1].x;
+        currentX += previousX + colorPickerW + _gapW;
+      }
+
+      colorPickerValues[i] = new PVector(currentX, colorPickerW);
+    }
+
+    return colorPickerValues;
   }
 
   Slider[] createSliders() {
@@ -145,7 +202,17 @@ class AlgorithmWindow {
     float buttonW = gap * 15;
     float buttonH = h - buttonY;
     float buttonX = 0;
-    return new Button("Coloured", true, buttonX, buttonY, buttonW, buttonH, fontSizeSmall);
+    return new Button("Black", true, buttonX, buttonY, buttonW, buttonH, fontSizeSmall);
+  }
+
+  ColorPicker[] createColorPickers(PVector[] _locations) {
+    int nColorPickers = _locations.length;
+    ColorPicker[] newColorPickers = new ColorPicker[nColorPickers];
+    for (int i = 0; i < nColorPickers; i ++) {
+      newColorPickers[i] = new ColorPicker(_locations[i].y, coloursButton.h);
+    }
+
+    return newColorPickers;
   }
 
   float getPopulation() {
@@ -186,5 +253,13 @@ class AlgorithmWindow {
 
   boolean getColouredState() {
     return  coloursButton.getEnabled();
+  }
+
+  color[] getColors() {
+    color[] colors= new color[colorPickers.length];
+    for (int i = 0; i < colorPickers.length; i++) {
+      colors[i] = colorPickers[i].getCurrentColor();
+    }
+    return colors;
   }
 }

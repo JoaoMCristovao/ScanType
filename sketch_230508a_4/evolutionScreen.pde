@@ -82,7 +82,7 @@ class EvolutionScreen {
 
   void showBoxLeft() {
     noFill();
-    stroke(black);
+    stroke(darkGray);
     strokeWeight(1);
     rect(0, 0, w * boxLeftW, h);
 
@@ -101,7 +101,7 @@ class EvolutionScreen {
 
   void showBestIndividual() {
     noFill();
-    stroke(black);
+    stroke(darkGray);
 
     float sideSize = w * boxLeftW - gap * 6;
     float bestX = boxLeftPadding;
@@ -295,12 +295,12 @@ class EvolutionScreen {
     float crossover = algorithmWindow.getCrossoverRate();
     int tournamentSize = int(algorithmWindow.getTournamentSize());
     
-    
     boolean isColoured = algorithmWindow.getColouredState();
+    color[] colors = algorithmWindow.getColors();
 
     evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
 
-    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured);
+    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured, colors);
     if (glyphToEvolve.length() > 1) glyphToEvolve = glyphToEvolve.substring( 0, glyphToEvolve.length()-1 );
     console.setMessage("Started evolution towards letter " + glyphToEvolve);
     evolutionStartTimeMS = millis();

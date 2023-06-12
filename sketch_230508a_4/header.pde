@@ -38,7 +38,7 @@ class Header {
     textSize(fontSizeBig);
     textAlign(LEFT, CENTER);
 
-    text("SCAN TYPE", mainPadding, h/2 - fontSizeMedium/6);
+    text("ScanType", mainPadding, h/2 - fontSizeMedium/6);
   }
 
   void updateButtons() {

@@ -13,11 +13,11 @@ int gap = 8; //measurement unit
 int mainPadding = gap * 4;
 
 //typography //TODO responsive typography
-int fontSizeTiny = 10;
-int fontSizeSmall = 16;
-int fontSizeMedium = 24;
-int fontSizeBig = 32;
-int fontSizeHuge = 46;
+int fontSizeTiny;
+int fontSizeSmall;
+int fontSizeMedium;
+int fontSizeBig;
+int fontSizeHuge;
 
 PFont fontWeightLight;
 PFont fontWeightRegular;
@@ -38,7 +38,7 @@ Button pressedButton;
 //objects
 PImage objectsHighRes[];
 PImage objectsLowRes[];
-int objectResolutionHigh = 1000;
+int objectResolutionHigh = 2000;
 int objectResolutionLow = 100;
 int[] enabledShapeIndexes;
 
@@ -53,12 +53,13 @@ void setup() {
   //gap = width/240;
   frameRate(120);
 
- // video = new Capture(this, 1280, 720);
-  video = new Capture(this, 1920, 1080, Capture.list()[0]);
+  // video = new Capture(this, 1280, 720);
+  video = new Capture(this, 1920, 1080, Capture.list()[1]);
   video.start();
 
   loadFonts();
   loadObjects();
+  calculateFontSizes();
 
   textFont(fontWeightRegular);
 
@@ -88,11 +89,11 @@ void draw() {
   pushMatrix();
   translate(mainPadding, header.h + mainPadding);
   switch(currentScreen) {
-  case 0: 
+  case 0:
     scanScreen.update();
     scanScreen.show();
     break;
-  case 1: 
+  case 1:
     evolutionScreen.update();
     evolutionScreen.show();
     break;
@@ -193,7 +194,15 @@ void loadExports() {
 
   for (int i = 0; i < names.length; i++) {
     for (int a = 0; a < alphabet.length(); a++) {
-      
     }
   }
+}
+
+
+void calculateFontSizes() {
+  fontSizeTiny = round(height / 108);
+  fontSizeSmall = round(height / 67.5);
+  fontSizeMedium = round(height / 45);
+  fontSizeBig = round(height / 33.75);
+  fontSizeHuge = round(height / 23.48);
 }
