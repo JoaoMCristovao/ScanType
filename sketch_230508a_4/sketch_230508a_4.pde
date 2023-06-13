@@ -54,7 +54,7 @@ void setup() {
   frameRate(120);
 
   // video = new Capture(this, 1280, 720);
-  video = new Capture(this, 1920, 1080, Capture.list()[1]);
+  video = new Capture(this, 1920, 1080, Capture.list()[0]);
   video.start();
 
   loadFonts();
