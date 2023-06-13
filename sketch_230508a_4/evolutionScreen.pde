@@ -400,7 +400,7 @@ class EvolutionScreen {
       return;
     }
     String filename = evoPopulation.targetGlyph + "-gen_" + evoPopulation.getGenerations() + "-pop_" + evoPopulation.getPopulationSize() + "-mut_" + nf(evoPopulation.mutationRate, 0, 2) + 
-    "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + evoPopulation.minShapeSize + "_" + evoPopulation.maxShapeSize;
+    "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + nf(evoPopulation.minShapeSize, 0, 2) + "_" + nf(evoPopulation.maxShapeSize, 0, 2);
     String path = sketchPath("data/outputs/" + filename);
 
     evoPopulation.getIndiv(index).getPhenotype(true).save(path + ".png");
