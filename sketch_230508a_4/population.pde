@@ -5,6 +5,7 @@ class Population {
   String targetGlyph;
   
   Individual[] individuals;
+  int maxGeneration;
   int generations;
   Evaluator evaluator;
 
@@ -23,12 +24,13 @@ class Population {
   int startTimeMS;
   String elapsedTime = "0s";
 
-  Population(String _glyph, PImage _referenceImage, int _populationSize, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize, boolean _isColoured, color[] _colors) {
+  Population(String _glyph, PImage _referenceImage, int _maxGeneration, int _populationSize, int _minShapes, int _maxShapes, float _minShapeSize, float _maxShapeSize, int _eliteSize, float _mutationRate, float _crossoverRate, int _tournamentSize, boolean _isColoured, color[] _colors) {
     targetGlyph = _glyph;
     
     individuals = new Individual[_populationSize];
     evaluator = new Evaluator(_referenceImage);
-
+    
+    maxGeneration = _maxGeneration;
     eliteSize = _eliteSize;
     mutationRate = _mutationRate;
     crossoverRate = _crossoverRate;

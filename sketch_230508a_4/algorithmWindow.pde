@@ -49,16 +49,17 @@ class AlgorithmWindow {
       sliders[i].update();
       translate(0, sliders[i].h);
     }
-    int currentPopulationSize = int(sliders[0].getValue());
-    sliders[3].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
+    popMatrix();
+    
+    int currentPopulationSize = int(sliders[1].getValue());
+    sliders[4].maxVal = constrain(ceil(currentPopulationSize/4), 1, 1000);
 
     int currentMaxShapes = int(sliders[6].getValue());
-    sliders[5].maxVal = currentMaxShapes;
+    sliders[7].maxVal = currentMaxShapes;
 
     float currentMaxShapeSize = sliders[8].getValue();
-    sliders[7].maxVal = currentMaxShapeSize;
+    sliders[9].maxVal = currentMaxShapeSize;
 
-    popMatrix();
   }
 
   void showExplanation() {
@@ -171,28 +172,30 @@ class AlgorithmWindow {
   }
 
   Slider[] createSliders() {
-    Slider[] newSliders = new Slider[9];
+    Slider[] newSliders = new Slider[10];
 
     float sliderW = w/2 - gap * 4;
     float sliderH = (h - gap * 10) / newSliders.length;
+    
+    newSliders[0] = new Slider(false, "Maximum Generation", 50, 1000, sliderW, sliderH, 1, true);
 
-    newSliders[0] = new Slider(false, "Population Size", 5, 200, sliderW, sliderH, 0.5, true);
+    newSliders[1] = new Slider(false, "Population Size", 5, 200, sliderW, sliderH, 0.5, true);
 
-    newSliders[1] = new Slider(true, "Mutation Rate", 0, 100, sliderW, sliderH, 0.20, true);
+    newSliders[2] = new Slider(true, "Mutation Rate", 0, 100, sliderW, sliderH, 0.20, true);
 
-    newSliders[2] = new Slider(true, "Crossover Rate", 0, 100, sliderW, sliderH, 0.30, true);
+    newSliders[3] = new Slider(true, "Crossover Rate", 0, 100, sliderW, sliderH, 0.30, true);
 
-    newSliders[3] = new Slider(false, "Tournament Size", 1, 25, sliderW, sliderH, 0.25, true);
+    newSliders[4] = new Slider(false, "Tournament Size", 1, 25, sliderW, sliderH, 0.25, true);
 
-    newSliders[4] = new Slider(false, "Elitism", 0, 4, sliderW, sliderH, 0, true);
-
-    newSliders[5] = new Slider(false, "Minimum Shapes", 1, 10, sliderW, sliderH, 0, true);
-
+    newSliders[5] = new Slider(false, "Elitism", 0, 4, sliderW, sliderH, 0.25, true);
+    
     newSliders[6] = new Slider(false, "Maximum Shapes", 1, 40, sliderW, sliderH, 0.8, true);
 
-    newSliders[7] = new Slider(false, "Minimum Shape Size", 0, 1, sliderW, sliderH, 0.3, false);
-
+    newSliders[7] = new Slider(false, "Minimum Shapes", 1, 10, sliderW, sliderH, 0, true);
+    
     newSliders[8] = new Slider(false, "Maximum Shape Size", 0, 1, sliderW, sliderH, 0.4, false);
+
+    newSliders[9] = new Slider(false, "Minimum Shape Size", 0, 1, sliderW, sliderH, 0.3, false);
 
     return newSliders;
   }
@@ -214,29 +217,33 @@ class AlgorithmWindow {
 
     return newColorPickers;
   }
-
-  float getPopulation() {
+  
+  float getMaxGeneration() {
     return sliders[0].getValue();
   }
 
-  float getMutationRate() {
-    return sliders[1].getValue()/100;
+  float getPopulation() {
+    return sliders[1].getValue();
   }
 
-  float getCrossoverRate() {
+  float getMutationRate() {
     return sliders[2].getValue()/100;
   }
 
-  float getTournamentSize() {
-    return sliders[3].getValue();
+  float getCrossoverRate() {
+    return sliders[3].getValue()/100;
   }
 
-  float getElitism() {
+  float getTournamentSize() {
     return sliders[4].getValue();
   }
 
-  float getMinimumShapes() {
+  float getElitism() {
     return sliders[5].getValue();
+  }
+
+  float getMinimumShapes() {
+    return sliders[7].getValue();
   }
 
   float getMaximumShapes() {
@@ -244,7 +251,7 @@ class AlgorithmWindow {
   }
 
   float getMinimumShapeSize() {
-    return sliders[7].getValue();
+    return sliders[9].getValue();
   }
 
   float getMaximumShapeSize() {

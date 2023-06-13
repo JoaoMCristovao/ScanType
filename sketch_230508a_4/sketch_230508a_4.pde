@@ -38,22 +38,17 @@ Button pressedButton;
 //objects
 PImage objectsHighRes[];
 PImage objectsLowRes[];
-int objectResolutionHigh = 2000;
+int objectResolutionHigh = 1080;
 int objectResolutionLow = 100;
 int[] enabledShapeIndexes;
-
-//exports
-PImage[][] exports;
 
 void settings() {
   fullScreen();
 }
 
 void setup() {
-  //gap = width/240;
   frameRate(120);
-
-  // video = new Capture(this, 1280, 720);
+  
   video = new Capture(this, 1920, 1080, Capture.list()[0]);
   video.start();
 
@@ -181,23 +176,6 @@ PVector[][] calculateGrid(int cells, float x, float y, float w, float h, float m
   }
   return positions;
 }
-
-void loadExports() {
-  String directory = "outputs/";
-
-  File f = dataFile(directory);
-  String[] names = f.list();
-
-  String alphabet = "abcdefghijklmnopqrstuvwxyz";
-
-  int[] nExportsPerLetter = new int[alphabet.length() * 2];
-
-  for (int i = 0; i < names.length; i++) {
-    for (int a = 0; a < alphabet.length(); a++) {
-    }
-  }
-}
-
 
 void calculateFontSizes() {
   fontSizeTiny = round(height / 108);

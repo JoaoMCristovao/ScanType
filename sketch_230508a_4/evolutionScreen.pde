@@ -55,12 +55,11 @@ class EvolutionScreen {
       disableAlphabetButtons(true);
       evoStartButton.setText("Stop Evolving");
       evolving = true;
-    } else if (evoStartButton.getSelected() && evoStartButton.getEnabled()) { //Stopped evolving
+    } else if ((evoStartButton.getSelected() && evoStartButton.getEnabled()) || (evoPopulation != null && evoPopulation.generations >= evoPopulation.maxGeneration)) { //Stopped evolving
       evoStartButton.setSelectedState(false);
       evoStartButton.setEnabledState(false);
       evoStartButton.setText("Start Evolving");
       console.setMessage("Stopped Evolving");
-      //println(evoPopulation.getIndiv(0).genes);
       disableAlphabetButtons(false);
       evolving = false;
     } else if (evoPopulation != null && evoStartButton.getEnabled()) evoPopulation.evolve(); //Is evolving
@@ -129,7 +128,7 @@ class EvolutionScreen {
 
     if (evoPopulation != null) {
       info =
-        "Current Generation: " + evoPopulation.getGenerations() +
+        "Generation: " + evoPopulation.getGenerations() + " / " + evoPopulation.maxGeneration +
         "\nElapsed Time: " + evoPopulation.getElapsedTime() +
         "\n\nNumber of Shapes: " + evoPopulation.minShapes + " – " + evoPopulation.maxShapes +
         "\nSize of Shapes: " + nf(evoPopulation.minShapeSize, 0, 2) + " – " + nf(evoPopulation.maxShapeSize, 0, 2) +
@@ -141,7 +140,7 @@ class EvolutionScreen {
         "\n\nBest Fitness: " + evoPopulation.getIndiv(0).getFitness();
     } else {
       info =
-        "Current Generation: -" +
+        "Generation: - / -" +
         "\nElapsed Time: -" +
         "\n\nNumber of Shapes: -" +
         "\nSize of Shapes: -" +
@@ -285,6 +284,7 @@ class EvolutionScreen {
     String glyphToEvolve = getGlyphToEvolve();
     PImage referenceImage = getReferenceImage(glyphToEvolve);
 
+    int maxGeneration = int(algorithmWindow.getMaxGeneration());
     int popSize = int(algorithmWindow.getPopulation());
     int minShapes = int(algorithmWindow.getMinimumShapes());
     int maxShapes = int(algorithmWindow.getMaximumShapes());
@@ -300,7 +300,7 @@ class EvolutionScreen {
 
     evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
 
-    evoPopulation = new Population(glyphToEvolve, referenceImage, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured, colors);
+    evoPopulation = new Population(glyphToEvolve, referenceImage, maxGeneration, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured, colors);
     if (glyphToEvolve.length() > 1) glyphToEvolve = glyphToEvolve.substring( 0, glyphToEvolve.length()-1 );
     console.setMessage("Started evolution towards letter " + glyphToEvolve);
     evolutionStartTimeMS = millis();
