@@ -3,7 +3,7 @@ class Button {
   String buttonText;
   PImage buttonImage;
   boolean boxed;
-  boolean selected = false; //is was selected recently
+  boolean selected = false; //is was selected
   boolean enabled = false; //if is toggled on
   boolean disabled = false; //if can be used
   float x, y;

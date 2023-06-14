@@ -6,7 +6,7 @@ class Evaluator {
   Evaluator(PImage image) {
     targetImage = image.copy(); // Get a clean copy of the target image
     targetImage.resize(objectResolutionLow, objectResolutionLow); // Resize the target image to the preset resolution
-    targetPixelsBrightness = getPixelsBrightness(targetImage, false); // Get brightness values of the target image
+    targetPixelsBrightness = getPixelsBrightness(targetImage); // Get brightness values of the target image
   }
 
   Evaluator() {
@@ -14,7 +14,7 @@ class Evaluator {
 
   float calculateFitness(Individual indiv) {
     PImage phenotype = indiv.getPhenotype(false);
-    int[] phenotypePixelsBrightness = getPixelsBrightness(phenotype, indiv.isColoured);
+    int[] phenotypePixelsBrightness = getPixelsBrightness(phenotype);
     float similarity = getSimilarityRMSE(targetPixelsBrightness, phenotypePixelsBrightness, 255);
     float distributionValue = 0.5 + 0.5 *indiv.getLayerDistribution();
     float fitnessValue = similarity * distributionValue; //
@@ -23,17 +23,18 @@ class Evaluator {
   }
 
   // Calculate the brighness values of a given image
-  int[] getPixelsBrightness(PImage image, boolean _isColoured) {
+  int[] getPixelsBrightness(PImage image) {
     int[] pixelBrightness = new int[image.pixels.length];
-    if (_isColoured) {
-      for (int i = 0; i < image.pixels.length; i++) {
-        pixelBrightness[i] = (int)brightness(image.pixels[i]); // Use default brightness because of blue skewness (very slow to calculate)
-      }
-    } else {
-      for (int i = 0; i < image.pixels.length; i++) {
-        pixelBrightness[i] = image.pixels[i] & 0xFF; // Use the blue channel to estimate brightness (very fast to calculate)
-      }
+    /*
+    //if(coloured) > deprecated
+     for (int i = 0; i < image.pixels.length; i++) {
+     pixelBrightness[i] = (int)brightness(image.pixels[i]); // Use default brightness because of blue skewness (very slow to calculate)
+     }
+     */
+    for (int i = 0; i < image.pixels.length; i++) {
+      pixelBrightness[i] = image.pixels[i] & 0xFF; // Use the blue channel to estimate brightness (very fast to calculate)
     }
+
     return pixelBrightness;
   }
 
