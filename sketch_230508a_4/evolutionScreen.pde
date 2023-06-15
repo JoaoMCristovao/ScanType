@@ -55,7 +55,7 @@ class EvolutionScreen {
       disableAlphabetButtons(true);
       evoStartButton.setText("Stop Evolving");
       evolving = true;
-    } else if ((evoStartButton.getSelected() && evoStartButton.getEnabled()) || (evoPopulation != null && evoPopulation.generations >= evoPopulation.maxGeneration)) { //Stopped evolving
+    } else if ((evoStartButton.getSelected() && evoStartButton.getEnabled()) || (evoPopulation != null && evoPopulation.generations >= evoPopulation.maxGeneration && evoStartButton.getEnabled())) { //Stopped evolving
       evoStartButton.setSelectedState(false);
       evoStartButton.setEnabledState(false);
       evoStartButton.setText("Start Evolving");
@@ -85,8 +85,8 @@ class EvolutionScreen {
     strokeWeight(1);
     rect(0, 0, w * boxLeftW, h);
 
-    showSettings();
     showBestIndividual();
+    showSettings();
     evoStartButton.show();
   }
 
@@ -217,7 +217,8 @@ class EvolutionScreen {
       }
     }
   }
-
+  
+  //run = update + show
   void runFontButtons() {
     pushMatrix();
 
@@ -343,30 +344,6 @@ class EvolutionScreen {
 
     return newButtons;
   }
-  
-  /*Button[] createFontButtons() {
-    String directory = "/references";
-
-    File f = dataFile(directory);
-    String[] names = f.list();
-
-    Button[] newButtons = new Button[names.length];
-
-    for (int i = 0; i < 3; i ++) {
-      float buttonWidth = names[i].length()* gap * 1.3;
-      float previousButtonX = gap*3;
-
-      if (i>0) {
-        previousButtonX =  newButtons[i-1].x;
-      }
-
-      newButtons[i] = new Button(names[i], true, previousButtonX - gap*3 - buttonWidth, 0, buttonWidth, gap * 3, fontSizeSmall);
-    }
-
-    newButtons[0].setEnabledState(true);
-
-    return newButtons;
-  }*/
 
   Button[] createFontButtons() {
     String directory = "/references";
@@ -399,6 +376,7 @@ class EvolutionScreen {
       console.setMessage("Individual not found. Try starting an evolution first.");
       return;
     }
+    
     String filename = evoPopulation.targetGlyph + "-gen_" + evoPopulation.getGenerations() + "-pop_" + evoPopulation.getPopulationSize() + "-mut_" + nf(evoPopulation.mutationRate, 0, 2) + 
     "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + nf(evoPopulation.minShapeSize, 0, 2) + "_" + nf(evoPopulation.maxShapeSize, 0, 2);
     String path = sketchPath("data/outputs/" + filename);

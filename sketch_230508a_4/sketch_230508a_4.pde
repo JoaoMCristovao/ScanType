@@ -12,7 +12,7 @@ color darkGray = color(110);
 int gap = 8; //measurement unit
 int mainPadding = gap * 4;
 
-//typography //TODO responsive typography
+//typography
 int fontSizeTiny;
 int fontSizeSmall;
 int fontSizeMedium;
@@ -44,6 +44,7 @@ int[] enabledShapeIndexes;
 
 void settings() {
   fullScreen();
+  //size(1720, 920);
 }
 
 void setup() {
