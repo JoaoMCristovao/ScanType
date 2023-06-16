@@ -16,7 +16,8 @@ Additionally, users can define the range of the images' sizes and the range of t
 ### Compilation of outputs
 
 [<img src="images/videocover1.png" width="50%">]([https://vimeo.com/787131355](https://vimeo.com/836191932))
-</br> One output per second.
+###### One output per second.
+</br>
 
 # User Interface
 ![](images/ui.png)
@@ -85,7 +86,9 @@ float _w, float _h, float _initialVal, boolean _isInt
 </br>
 <img src="images/typeface4.png" width="50%">
 </br>
-<img src="images/moreoutputs.png" width="50%"></br>
+<img src="images/typeface5.png" width="50%">
+</br>
+<img src="images/all.png" width="70%"></br>
 
 
 # Acknowledgements
