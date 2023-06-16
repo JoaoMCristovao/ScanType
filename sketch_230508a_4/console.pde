@@ -1,6 +1,6 @@
 class Console {
 
-  String message = "Welcome to SCAN TYPE!";
+  String message = "Welcome to ScanType!";
   String messageTime;
   Float boxHeight;
 
