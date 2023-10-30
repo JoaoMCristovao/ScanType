@@ -10,12 +10,12 @@ Additionally, users can define the range of the images' sizes and the range of t
 
 # Watch the videos
 ### Documental Video
-[<img src="images/videocover.png" width="100%">]([https://vimeo.com/787131355](https://vimeo.com/836191932))
+[<img src="images/videocover.png" width="100%">](https://vimeo.com/836191932)
 
 
 ### Compilation of outputs
 
-[<img src="images/videocover1.png" width="50%">]([https://vimeo.com/787131355](https://vimeo.com/836191932))
+[<img src="images/videocover1.png" width="50%">](https://vimeo.com/836231171)
 ###### One output per second.
 </br>
 
