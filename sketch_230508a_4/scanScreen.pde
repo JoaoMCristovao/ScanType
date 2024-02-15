@@ -70,10 +70,12 @@ class ScanScreen {
   }
 
   void show() {
-    showCapture();
-    showSaveButton();
-    //runFilterSelection();
-    runSlider();
+    if(video != null){
+      showCapture();
+      showSaveButton();
+      //runFilterSelection();
+      runSlider();
+    }
     updateShapeButtons();
     showShapeButtons();
     enableAllButton.show();
@@ -88,7 +90,7 @@ class ScanScreen {
     if (video.available()) {
       video.read();
     }
-
+    
     captureImg = cropToSquare(video, captureW);
 
     image(captureImg, 0, 0, captureW, captureW);
@@ -100,7 +102,7 @@ class ScanScreen {
     popMatrix();
   }
 
-  void showSaveButton() {
+  void showSaveButton() {   
     pushMatrix();
 
     translate(0, captureY + captureW + gap * 2);

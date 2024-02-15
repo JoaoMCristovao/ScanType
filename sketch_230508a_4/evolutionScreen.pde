@@ -28,6 +28,10 @@ class EvolutionScreen {
   Population evoPopulation;
   int evolutionStartTimeMS;
 
+  //statistics
+  int evolutionID;
+  PrintWriter statisticsWriter;
+
   EvolutionScreen(float _w, float _h) {
     w = _w;
     h = _h;
@@ -56,14 +60,17 @@ class EvolutionScreen {
       evoStartButton.setText("Stop Evolving");
       evolving = true;
     } else if ((evoStartButton.getSelected() && evoStartButton.getEnabled()) || (evoPopulation != null && evoPopulation.generations >= evoPopulation.maxGeneration && evoStartButton.getEnabled())) { //Stopped evolving
+    if(exportingStatistics) endStatistics();
       evoStartButton.setSelectedState(false);
       evoStartButton.setEnabledState(false);
       evoStartButton.setText("Start Evolving");
       console.setMessage("Stopped Evolving");
       disableAlphabetButtons(false);
       evolving = false;
-    } else if (evoPopulation != null && evoStartButton.getEnabled()) evoPopulation.evolve(); //Is evolving
-    else if (!evolving) { //Not evolving
+    } else if (evoPopulation != null && evoStartButton.getEnabled()) { //Is evolving
+      if(exportingStatistics) doStatistics();
+      evoPopulation.evolve();
+    } else if (!evolving) { //Not evolving
       algorithmWindow.update();
       updateAlphabetButtons();
       runFontButtons();
@@ -217,7 +224,7 @@ class EvolutionScreen {
       }
     }
   }
-  
+
   //run = update + show
   void runFontButtons() {
     pushMatrix();
@@ -295,9 +302,11 @@ class EvolutionScreen {
     float mutation = algorithmWindow.getMutationRate();
     float crossover = algorithmWindow.getCrossoverRate();
     int tournamentSize = int(algorithmWindow.getTournamentSize());
-    
+
     boolean isColoured = algorithmWindow.getColouredState();
     color[] colors = algorithmWindow.getColors();
+
+    if (exportingStatistics) setupStatistics(glyphToEvolve, maxGeneration, popSize, minShapes, maxShapes, minShapeSize, maxShapeSize, eliteSize, mutation, crossover, tournamentSize, isColoured, colors);
 
     evoGrid = calculateGrid(popSize, evoGridPos.x, evoGridPos.y, w - evoGridPos.x, h - evoGridPos.y, 0, gap, gap, true);
 
@@ -376,13 +385,35 @@ class EvolutionScreen {
       console.setMessage("Individual not found. Try starting an evolution first.");
       return;
     }
-    
-    String filename = evoPopulation.targetGlyph + "-gen_" + evoPopulation.getGenerations() + "-pop_" + evoPopulation.getPopulationSize() + "-mut_" + nf(evoPopulation.mutationRate, 0, 2) + 
-    "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + nf(evoPopulation.minShapeSize, 0, 2) + "_" + nf(evoPopulation.maxShapeSize, 0, 2);
+
+    String filename = evoPopulation.targetGlyph + "-gen_" + evoPopulation.getGenerations() + "-pop_" + evoPopulation.getPopulationSize() + "-mut_" + nf(evoPopulation.mutationRate, 0, 2) +
+      "-co_" + nf(evoPopulation.crossoverRate, 0, 2) + "-tou_" + evoPopulation.tournamentSize + "-nSh_" + evoPopulation.minShapes + "_" + evoPopulation.maxShapes + "-shS_" + nf(evoPopulation.minShapeSize, 0, 2) + "_" + nf(evoPopulation.maxShapeSize, 0, 2);
     String path = sketchPath("data/outputs/" + filename);
 
     evoPopulation.getIndiv(index).getPhenotype(true).save(path + ".png");
 
     console.setMessage("Exported to folder outputs: " + filename);
+  }
+
+  void setupStatistics(String glyphToEvolve, int maxGeneration, int popSize, int minShapes, int maxShapes, float minShapeSize, float maxShapeSize, int eliteSize, float mutation, float crossover, int tournamentSize, boolean isColoured, color[] colors) {
+    
+    evolutionID = round(random(1000000));
+    statisticsWriter = createWriter("data/statistics/" + str(evolutionID) + ".csv");
+    statisticsWriter.println("generation,best_fitness,glyphToEvolve,maxGeneration,popSize,minShapes,maxShapes,minShapeSize,maxShapeSize," + 
+      "eliteSize,mutation,crossover,tournamentSize,isColoured,colorA,colorB,colorC");
+    
+    statisticsWriter.println("_,_," + glyphToEvolve + "," + maxGeneration + "," + popSize + "," + minShapes + "," + maxShapes + "," + minShapeSize + "," + maxShapeSize + "," + 
+      eliteSize + "," + mutation + "," + crossover + "," + tournamentSize + "," + isColoured + "," + hex(colors[0]) + "," + hex(colors[1]) + "," + hex(colors[2]));
+
+
+}
+
+  void doStatistics() {
+    statisticsWriter.println(evoPopulation.generations + "," + evoPopulation.getIndiv(0).fitness);
+  }
+
+  void endStatistics() {
+    statisticsWriter.flush();
+    statisticsWriter.close();
   }
 }

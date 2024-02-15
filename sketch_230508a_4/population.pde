@@ -49,7 +49,7 @@ class Population {
   }
 
   void initialize() {
-
+    
     for (int i = 0; i < individuals.length; i++) {
       individuals[i] = new Individual(minShapes, maxShapes, minShapeSize, maxShapeSize, isColoured, colors);
       float fitness = evaluator.calculateFitness(individuals[i]);

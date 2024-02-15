@@ -1,6 +1,9 @@
 import processing.video.*;
 Capture video;
 
+//statistics
+boolean exportingStatistics = true;
+
 //colors
 color white = color(255);
 color black = color(0);
@@ -49,9 +52,14 @@ void settings() {
 
 void setup() {
   frameRate(120);
-  
-  video = new Capture(this, 1920, 1080, Capture.list()[0]);
-  video.start();
+
+  if(Capture.list().length > 0){
+    video = new Capture(this, 1920, 1080, Capture.list()[0]);
+    video.start();
+  }
+  else {
+    video = null;
+  }
 
   loadFonts();
   loadObjects();
@@ -77,7 +85,7 @@ void draw() {
 
   header.update();
 
-  if (previousScreen != currentScreen) {
+  if (previousScreen != currentScreen && video != null) {
     if (currentScreen == 0) video.start();
     else video.stop();
   }
@@ -106,6 +114,11 @@ void mouseReleased() {
   if (pressedButton == null) return;
   pressedButton.selected();
   pressedButton = null;
+}
+
+
+void stop(){
+  
 }
 
 void loadObjects() {
