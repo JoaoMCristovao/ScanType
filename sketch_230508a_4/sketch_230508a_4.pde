@@ -2,7 +2,7 @@ import processing.video.*;
 Capture video;
 
 //statistics
-boolean exportingStatistics = true;
+boolean exportingStatistics = false;
 
 //colors
 color white = color(255);

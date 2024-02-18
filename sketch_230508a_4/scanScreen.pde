@@ -23,6 +23,7 @@ class ScanScreen {
   Button[] shapeButtons;
   
   //state all shape
+  Button enableRandomButton;
   Button enableAllButton;
   Button disableAllButton;
 
@@ -44,6 +45,8 @@ class ScanScreen {
     //disableAllButton = new Button("Disable All", true, w - buttonW, buttonH, fontSizeSmall, CENTER, CENTER);
     
                            //Button(String _buttonText, boolean _boxed, float _x, float _y, float _w, float _h, float _fontSize) {
+                             
+    enableRandomButton = new Button("Random", true, w - buttonW*1.5 - gap * 4, h - buttonH, buttonW/2, buttonH*1.5, fontSizeSmall);
     enableAllButton = new Button("Enable All", true, w - buttonW - gap * 2, h - buttonH, buttonW/2, buttonH*1.5, fontSizeSmall);
     disableAllButton = new Button("Disable All", true, w - buttonW/2, h - buttonH, buttonW/2, buttonH*1.5, fontSizeSmall);
 
@@ -55,6 +58,13 @@ class ScanScreen {
   }
 
   void update() {
+    enableRandomButton.update();
+    if(enableRandomButton.getSelected()){
+        enableRandomButton.setSelectedState(false);
+        enableOnlyNShapeButtons(3);
+        setEnabledShapeIndexes();
+    }
+    
     enableAllButton.update();
     if(enableAllButton.getSelected()){
         enableAllButton.setSelectedState(false);
@@ -78,6 +88,7 @@ class ScanScreen {
     }
     updateShapeButtons();
     showShapeButtons();
+    enableRandomButton.show();
     enableAllButton.show();
     disableAllButton.show();
   }
